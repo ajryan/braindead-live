@@ -28,9 +28,13 @@ Read `AGENTS.md` before touching anything.
 
 ## Done
 
-- [x] Eleventy build replacing the Squarespace mirror. **Ships zero
-      JavaScript** — verified 0 console errors / 0 failed requests across
+- [x] Eleventy build replacing the Squarespace mirror. Ships **no
+      first-party JavaScript** — the only script is the deferred Umami
+      analytics tag. Verified 0 console errors / 0 failed requests across
       all 48 pages.
+- [x] Umami analytics (`cloud.umami.is`), deferred, in the head of every
+      page. Website id lives in `src/_data/site.json`; clearing it removes
+      the tag everywhere.
 - [x] 46 event pages from one template + extracted data.
 - [x] Real CSS layout — no Fluid Engine `container-styles` /
       `transform-vars` soup, no vendor bundles.
