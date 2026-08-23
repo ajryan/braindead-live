@@ -80,10 +80,16 @@ jobs:
             echo "Deploying to project page: /${GITHUB_REPOSITORY#*/}"
           fi
 
+      - name: Lint CSS
+        run: npm run lint:css
+
       - name: Build
         env:
           PATH_PREFIX: ${{ steps.base.outputs.path_prefix }}
         run: npm run build
+
+      - name: Lint built HTML
+        run: npm run lint:html
 
       - name: Write CNAME
         if: vars.CUSTOM_DOMAIN != ''

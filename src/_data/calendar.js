@@ -42,6 +42,9 @@ function ticketUrl(e) {
 // Ticket links also appear inline in the event body prose, not just as
 // buttons. Tag those too, so "buy-tickets" counts every real ticket click.
 function tagTicketLinks(html, slug) {
+  // Squarespace emitted some anchors with an empty target attribute, which
+  // is invalid. Drop it rather than shipping broken markup.
+  html = html.replace(/\s+target=""/g, '');
   return html.replace(/<a\s+href="(https?:\/\/[^"]+)"/gi, (m, href) =>
     TICKET_HOSTS.test(href)
       ? `<a data-umami-event="buy-tickets" data-umami-event-placement="body" data-umami-event-slug="${slug}" href="${href}"`

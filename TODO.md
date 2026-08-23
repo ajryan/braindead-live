@@ -35,6 +35,12 @@ Read `AGENTS.md` before touching anything.
 - [x] Umami analytics (`cloud.umami.is`), deferred, in the head of all 48
       pages. Website id lives in `src/_data/site.json`; clearing it removes
       the tag everywhere.
+- [x] Linting: stylelint on `src/assets/css`, html-validate on the built
+      output. `npm run lint` runs both. Both clean. Fixed two real defects
+      it caught: a duplicate `.next-show` selector, and empty `target=""`
+      attributes inherited from Squarespace body HTML.
+- [x] Landing background video cut to a 10s loop (1.28 MB, down from
+      3.07 MB). Whole landing page is now ~1.45 MB.
 - [x] Umami event tags on the links worth tracking:
       - `buy-tickets` — every ticket link, including the ones inline in
         event body prose, not just the buttons. Carries `placement`
@@ -166,32 +172,40 @@ Read `AGENTS.md` before touching anything.
       Note: because CSS asset URLs are relative rather than
       prefix-substituted, no code changes should be needed for the
       switch — only configuration.
-- [ ] **"Coming up" is empty with current data.** The snapshot has one
-      upcoming event (2026-09-26) and 45 past, so the section is hidden
-      entirely. Resolves itself once ingest feeds real dates.
+
 - [ ] **45 past event pages are unlinked.** They still build and resolve
       at `/calendar/<slug>/`, so shared links and search results keep
       working, but nothing navigates to them. Decide between an archive
       page and leaving them permalink-only.
-- [ ] **Verify the Mailchimp `ht` token.** It embeds a generation
+
+- [ ] The mirror is gitignored but still in earlier commits, so a fresh
+      clone pulls ~101 MB. Only a history rewrite would shrink it.
+
+## Notes, but no action needed
+
+- **Mailchimp `ht` token is unverified.** It embeds a generation
       timestamp (2026-05-14) and may be validated server-side. Only a real
       submission proves the form works end to end — not done here, since
       it would add a live subscriber.
-- [ ] **Wire up the contact form.** It is built and verified (labelled
+
+- **Contact form has no backend.** It is built and verified (labelled
       fields, `required`, `autocomplete`) but renders only when
       `contactEndpoint` is set in `src/_data/site.json`. It is `null`
       today, so the page shows DM buttons instead — deliberately, so
       nobody fills in a form that silently discards their message.
-- [ ] Video embed on the homepage (was `SQUARESPACE_CONTEXT`-driven).
-- [ ] Optional: a "Latest from Facebook" strip fetched client-side from
-      the FetchRSS feed — the one use where a reverse-chronological post
-      feed is the correct shape. (Events no longer need it.)
-- [ ] Ingest sets `end` to null for new Facebook events, since the events
-      tab gives no end time. Existing events keep theirs. Decide whether to
-      default to a duration or leave end times absent for new shows.
-- [ ] Landing page weighs ~3.2 MB, almost all video. If it is going on a
-      QR code for people on venue cell service, a 12s loop would halve it.
-- [ ] Add stylelint + an HTML linter. Safe now: the whitespace-sensitivity
-      constraint applied to Squarespace's markup, not to `src/`.
-- [ ] The mirror is gitignored but still in earlier commits, so a fresh
-      clone pulls ~101 MB. Only a history rewrite would shrink it.
+
+- **Homepage video: nothing to port.** The original used YouTube video
+  `kzL268WnzmY` as a *section background* on the hero, which rendered blank
+  in the mirror because Squarespace's `video-background.js` never loaded.
+  That hero was removed by design, and the landing page does the same job
+  better with a self-hosted, graded clip and no third-party player.
+
+- **Event titles run long.** One is 144 characters. Browsers show them
+  fine; search results truncate around 60. Shortening real show names
+  would cost more in readability than it gains in SEO.
+
+- **The Facebook ingest will break eventually.** It reads undocumented
+  internal GraphQL. It fails safe — the site keeps serving the last
+  known-good data — but it fails *silently*: the calendar just stops
+  updating with no error anywhere. Worth adding a notification if the
+  calendar ever matters more than it does today.

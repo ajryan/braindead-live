@@ -9,10 +9,16 @@
     "build": "eleventy",
     "serve": "eleventy --serve",
     "clean": "rm -rf _site",
-    "ingest": "python3 tools/ingest-facebook.py"
+    "ingest": "python3 tools/ingest-facebook.py",
+    "lint:css": "stylelint \"src/assets/css/**/*.css\"",
+    "lint:html": "html-validate \"_site/**/*.html\"",
+    "lint": "npm run lint:css && npm run build && npm run lint:html"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "html-validate": "^11.4.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0"
   },
   "dependencies": {
     "@11ty/eleventy-img": "^7.0.0"

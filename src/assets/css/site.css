@@ -5,22 +5,25 @@
    --------------------------------------------------------------------------- */
 
 @font-face {
-  font-family: 'Shrikhand';
+  font-family: Shrikhand;
   src: url('../fonts/shrikhand-400.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
+
 @font-face {
-  font-family: 'Bitter';
+  font-family: Bitter;
   src: url('../fonts/bitter-400.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
+
 @font-face {
-  font-family: 'Bitter';
+  font-family: Bitter;
   src: url('../fonts/bitter-700.woff2') format('woff2');
   font-weight: 700; font-style: normal; font-display: swap;
 }
+
 @font-face {
-  font-family: 'Bitter';
+  font-family: Bitter;
   src: url('../fonts/bitter-400-italic.woff2') format('woff2');
   font-weight: 400; font-style: italic; font-display: swap;
 }
@@ -32,7 +35,7 @@
   --peri: #8075ff;         /* headings, buttons, marquee */
   --violet: #6321ee;       /* deep accent */
   --sage: #cad5ca;         /* site background behind sections */
-  --muted: rgba(249, 240, 251, .62);
+  --muted: rgb(249, 240, 251, .62);
   --display: 'Shrikhand', Georgia, serif;
   --body: 'Bitter', Georgia, serif;
   --maxw: 68rem;
@@ -99,10 +102,10 @@ h3 { font-size: 1.35rem; }
 }
 .marquee span {
   text-shadow:
-    0 2px 0 rgba(0, 0, 0, .9),
-    0 5px 10px rgba(0, 0, 0, .85),
-    0 12px 26px rgba(0, 0, 0, .7),
-    0 22px 48px rgba(0, 0, 0, .5);
+    0 2px 0 rgb(0, 0, 0, .9),
+    0 5px 10px rgb(0, 0, 0, .85),
+    0 12px 26px rgb(0, 0, 0, .7),
+    0 22px 48px rgb(0, 0, 0, .5);
   font-family: var(--display);
   font-size: clamp(3.5rem, 11.5vw, 11.56rem);
   letter-spacing: -.02em;
@@ -111,7 +114,9 @@ h3 { font-size: 1.35rem; }
   padding-right: .35em;
   white-space: nowrap;
 }
+
 @keyframes marquee { to { transform: translateX(-50%); } }
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; transform: none; }
   .marquee { overflow-x: auto; }
@@ -150,8 +155,8 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
 .event-card-link {
   display: block; height: 100%;
   text-decoration: none; color: var(--cream);
-  background: rgba(249, 240, 251, .04);
-  border: 1px solid rgba(128, 117, 255, .28);
+  background: rgb(249, 240, 251, .04);
+  border: 1px solid rgb(128, 117, 255, .28);
   border-radius: .75rem; overflow: hidden;
   transition: border-color .15s, transform .15s;
 }
@@ -171,7 +176,7 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
   font-family: var(--body); font-weight: 700;
   font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); margin: 2.75rem 0 1rem;
-  padding-bottom: .5rem; border-bottom: 1px solid rgba(128, 117, 255, .2);
+  padding-bottom: .5rem; border-bottom: 1px solid rgb(128, 117, 255, .2);
 }
 .empty { color: var(--muted); font-style: italic; }
 
@@ -192,7 +197,7 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
 .lineup ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
 .lineup li a {
   display: inline-block; text-decoration: none;
-  border: 1px solid rgba(128, 117, 255, .4); border-radius: var(--pill);
+  border: 1px solid rgb(128, 117, 255, .4); border-radius: var(--pill);
   padding: .35rem .9rem; font-size: .9rem;
 }
 .lineup li a:hover { background: var(--peri); color: var(--cream); }
@@ -204,8 +209,8 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
   display: grid; gap: 1.5rem; align-items: center;
   grid-template-columns: minmax(0, 14.4rem) 1fr;
   color: var(--cream);
-  background: rgba(249, 240, 251, .04);
-  border: 1px solid rgba(128, 117, 255, .28);
+  background: rgb(249, 240, 251, .04);
+  border: 1px solid rgb(128, 117, 255, .28);
   border-radius: .75rem; overflow: hidden;
 }
 .next-show-link:has(.stretched:hover) { border-color: var(--peri); }
@@ -217,6 +222,7 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
 .next-show-text { padding: 1.2rem 1.25rem; }
 .next-show-link picture, .next-show-link img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .next-show-link h3 { font-family: var(--body); font-weight: 700; color: var(--cream); font-size: 1rem; }
+
 @media (max-width: 40rem) { .next-show-link { grid-template-columns: 1fr; } }
 
 /* ---- footer: the periwinkle band from the original ---- */
@@ -251,7 +257,7 @@ main > h1 { margin-bottom: 1.5rem; }
 .next-show > h2 { margin-bottom: 1rem; }
 .upcoming, .past { margin-top: 3.5rem; }
 .upcoming > h2, .past > h2 { margin-bottom: 1.5rem; }
-.next-show { margin-top: 1.25rem; }
+.next-show { position: relative; margin-top: 1.25rem; }
 
 
 /* ---- announcement bar ---- */
@@ -278,8 +284,8 @@ main > h1 { margin-bottom: 1.5rem; }
 /* Sized to sit with .team-bio (.92rem) rather than the 1rem default. */
 .field input, .field textarea {
   width: 100%; font: 400 .92rem/1.5 var(--body);
-  color: var(--cream); background: rgba(249, 240, 251, .06);
-  border: 1px solid rgba(128, 117, 255, .38);
+  color: var(--cream); background: rgb(249, 240, 251, .06);
+  border: 1px solid rgb(128, 117, 255, .38);
   border-radius: .45rem; padding: .55rem .75rem;
 }
 /* iOS Safari zooms the viewport when focusing an input under 16px, so hold
@@ -289,10 +295,11 @@ main > h1 { margin-bottom: 1.5rem; }
 }
 .field input:focus-visible, .field textarea:focus-visible {
   outline: 2px solid var(--peri); outline-offset: 1px;
-  background: rgba(249, 240, 251, .1);
+  background: rgb(249, 240, 251, .1);
 }
 .field textarea { resize: vertical; }
 .field-row { display: grid; gap: 0 1rem; grid-template-columns: 1fr 1fr; }
+
 @media (max-width: 34rem) { .field-row { grid-template-columns: 1fr; } }
 .field--check { display: flex; align-items: center; gap: .6rem; }
 .field--check input { width: auto; }
@@ -307,6 +314,7 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
   display: grid; gap: 2rem;
   grid-template-columns: repeat(4, 1fr);
 }
+
 @media (max-width: 56rem) {
   .team-list { grid-template-columns: repeat(2, 1fr); gap: 1.75rem 1.25rem; }
 }
@@ -321,12 +329,13 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
 .team-role {
   margin: 0 0 .6rem; padding-bottom: .6rem;
   font-size: .85rem; color: var(--peri);
-  border-bottom: 1px solid rgba(128, 117, 255, .25);
+  border-bottom: 1px solid rgb(128, 117, 255, .25);
 }
 .team-bio { margin: 0; font-size: .92rem; color: var(--muted); line-height: 1.55; }
 
 /* ---- contact ---- */
 .contact-grid { display: grid; gap: 2rem; grid-template-columns: minmax(0, 14.4rem) 1fr; align-items: start; }
+
 @media (max-width: 44rem) { .contact-grid { grid-template-columns: 1fr; } }
 .contact-intro { margin: 0; color: var(--muted); }
 .contact-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; }
@@ -334,7 +343,7 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
 /* ---- social icon links ---- */
 .socials { list-style: none; display: flex; align-items: center; gap: 1.34rem; margin: 0; padding: 0; }
 .socials a { display: block; color: var(--violet); transition: color .15s; }
-.socials svg { width: 2.1875rem; height: 2.1875rem; fill: currentColor; display: block; }
+.socials svg { width: 2.1875rem; height: 2.1875rem; fill: currentcolor; display: block; }
 .socials a:hover { color: var(--peri); }
 .socials a:focus-visible { outline: 2px solid var(--peri); outline-offset: 3px; border-radius: 4px; }
 .site-header .socials a, .site-footer .socials a { color: var(--cream); }
@@ -349,7 +358,6 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
    waver, and a hue cycle does the psychedelic part. */
 .filter-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-.next-show { position: relative; }
 
 .oozing-logo {
   position: absolute;
@@ -359,7 +367,7 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
   z-index: 2;
   pointer-events: none;
   transform-origin: 60% 40%;
-  filter: url(#ooze) saturate(1.15);
+  filter: url("#ooze") saturate(1.15);
   animation: logo-waver 13s ease-in-out infinite, logo-hue 24s linear infinite;
   will-change: transform, filter;
 }
@@ -371,15 +379,17 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
   75%  { transform: rotate(-1deg)   skewX(-2.5deg) skewY(1deg)    scale(1.03);  }
   100% { transform: rotate(-2.5deg) skewX(0deg)    skewY(0deg)    scale(1);     }
 }
+
 @keyframes logo-hue {
-  0%   { filter: url(#ooze) saturate(1.15) hue-rotate(0deg);    }
-  50%  { filter: url(#ooze) saturate(1.35) hue-rotate(28deg);   }
-  100% { filter: url(#ooze) saturate(1.15) hue-rotate(0deg);    }
+  0%   { filter: url("#ooze") saturate(1.15) hue-rotate(0deg);    }
+  50%  { filter: url("#ooze") saturate(1.35) hue-rotate(28deg);   }
+  100% { filter: url("#ooze") saturate(1.15) hue-rotate(0deg);    }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .oozing-logo { animation: none; filter: none; transform: rotate(-2.5deg); }
 }
+
 @media (max-width: 34rem) {
   .oozing-logo { top: -0.75rem; right: -0.25rem; width: 4.75rem; }
 }
@@ -409,9 +419,9 @@ body.landing { overflow-x: clip; }
   position: absolute; inset: 0; z-index: 1;
   background:
     /* vignette only near the edges, so the centre of the footage stays bright */
-    radial-gradient(ellipse 120% 110% at center, rgba(10, 6, 9, 0) 42%, rgba(10, 6, 9, .42) 100%),
+    radial-gradient(ellipse 120% 110% at center, rgb(10, 6, 9, 0) 42%, rgb(10, 6, 9, .42) 100%),
     /* just enough at top/bottom to keep the corner labels readable */
-    linear-gradient(to bottom, rgba(10, 6, 9, .28), rgba(10, 6, 9, .06) 38%, rgba(10, 6, 9, .06) 62%, rgba(10, 6, 9, .5));
+    linear-gradient(to bottom, rgb(10, 6, 9, .28), rgb(10, 6, 9, .06) 38%, rgb(10, 6, 9, .06) 62%, rgb(10, 6, 9, .5));
 }
 
 .lp-content {
@@ -423,10 +433,10 @@ body.landing { overflow-x: clip; }
 .lp-flyer {
   display: block; line-height: 0; border-radius: .6rem; overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(249, 240, 251, .22),
-    0 10px 28px rgba(0, 0, 0, .62),
-    0 28px 70px rgba(0, 0, 0, .7),
-    0 0 110px 26px rgba(0, 0, 0, .55);   /* halo separating it from the footage */
+    0 0 0 1px rgb(249, 240, 251, .22),
+    0 10px 28px rgb(0, 0, 0, .62),
+    0 28px 70px rgb(0, 0, 0, .7),
+    0 0 110px 26px rgb(0, 0, 0, .55);   /* halo separating it from the footage */
 }
 /* The shared .flyer class carries a block margin for event pages; reset it
    here or the container sits taller than the image and the video shows
@@ -440,9 +450,9 @@ body.landing { overflow-x: clip; }
 .lp-flyer:hover {
   box-shadow:
     0 0 0 2px var(--peri),
-    0 10px 28px rgba(0, 0, 0, .62),
-    0 28px 70px rgba(0, 0, 0, .7),
-    0 0 110px 26px rgba(0, 0, 0, .55);
+    0 10px 28px rgb(0, 0, 0, .62),
+    0 28px 70px rgb(0, 0, 0, .7),
+    0 0 110px 26px rgb(0, 0, 0, .55);
 }
 
 .lp-cta {
@@ -451,7 +461,7 @@ body.landing { overflow-x: clip; }
   background: var(--peri); color: var(--cream);
   border: 1px solid var(--peri); border-radius: var(--pill);
   padding: .95rem 2.6rem; text-decoration: none;
-  box-shadow: 0 10px 30px rgba(128, 117, 255, .35);
+  box-shadow: 0 10px 30px rgb(128, 117, 255, .35);
   transition: background .15s, color .15s, transform .15s;
 }
 .lp-cta:hover { background: var(--cream); color: var(--peri); border-color: var(--cream); transform: translateY(-2px); }
@@ -464,16 +474,16 @@ body.landing { overflow-x: clip; }
   text-transform: lowercase;
   letter-spacing: .04em;
   font-size: clamp(.82rem, 1.7vw, 1.05rem);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, .95), 0 2px 12px rgba(0, 0, 0, .8);
+  text-shadow: 0 1px 3px rgb(0, 0, 0, .95), 0 2px 12px rgb(0, 0, 0, .8);
 }
 .lp-continue { left: clamp(1rem, 3vw, 1.75rem); color: var(--cream); text-decoration: none; opacity: .82; }
 .lp-continue:hover { opacity: 1; color: var(--peri); }
 
-.lp-presented { right: clamp(1rem, 3vw, 1.75rem); color: rgba(249, 240, 251, .72); display: flex; align-items: center; gap: .3rem; }
+.lp-presented { right: clamp(1rem, 3vw, 1.75rem); color: rgb(249, 240, 251, .72); display: flex; align-items: center; gap: .3rem; }
 .lp-presented a { color: var(--peri); text-decoration: none; }
 .lp-presented a:hover { color: var(--cream); }
 .lp-ig { display: inline-flex; opacity: .9; }
-.lp-ig svg { fill: currentColor; display: block; }
+.lp-ig svg { fill: currentcolor; display: block; }
 .lp-ig:hover { opacity: 1; }
 
 @media (max-width: 40rem) {
@@ -487,6 +497,7 @@ body.landing { overflow-x: clip; }
   .lp-presented { right: auto; left: clamp(1rem, 3vw, 1.75rem); bottom: 2.6rem; }
   .lp-continue { bottom: 1.1rem; }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .lp-video { display: none; }
   .lp { background: var(--ink) url("../video/hero-poster.jpg") center/cover no-repeat; }
