@@ -86,9 +86,59 @@ Read `AGENTS.md` before touching anything.
       - Tickettailor (`tickettailor.com/events/braindeadlive`) has a real
         API and is a better source for ticketed shows, though it will not
         cover free ones.
-- [ ] **Point DNS at GitHub Pages.** The workflow writes a `CNAME` for
-      `braindead.live`. Until the DNS records exist and the custom domain
-      is confirmed in repo settings, use the project URL build.
+- [ ] **Move to the custom domain `braindead.live`.** Currently deployed
+      to the project URL `https://ajryan.github.io/braindead-live/`, which
+      builds with `PATH_PREFIX=/braindead-live`. Full cutover:
+
+      1. **Check what currently answers for `braindead.live`.** It still
+         points at Squarespace. Decide the cutover window — DNS changes
+         are not instant and the old site serves until TTL expires. Lower
+         the TTL on the existing records ~24h beforehand if you can.
+      2. **Add DNS records** at the registrar. For the apex domain, four
+         A records:
+             185.199.108.153
+             185.199.109.153
+             185.199.110.153
+             185.199.111.153
+         and (recommended) four AAAA records:
+             2606:50c0:8000::153
+             2606:50c0:8001::153
+             2606:50c0:8002::153
+             2606:50c0:8003::153
+         For `www`, a CNAME to `ajryan.github.io`. Remove the old
+         Squarespace records for whatever you point at GitHub.
+      3. **Set the repo variable** so the build stops adding the path
+         prefix and starts writing a CNAME file:
+             gh variable set CUSTOM_DOMAIN --body braindead.live
+      4. **Set the domain on the Pages site** (also writes it in repo
+         settings, and is what GitHub verifies against):
+             gh api --method PUT repos/ajryan/braindead-live/pages                -f cname=braindead.live
+      5. **Re-run the deploy** so the site rebuilds prefix-free:
+             gh workflow run deploy.yml --ref main
+      6. **Wait for the certificate.** GitHub provisions Let's Encrypt
+         after DNS resolves; it can take up to ~24h. Then enable HTTPS
+         enforcement:
+             gh api --method PUT repos/ajryan/braindead-live/pages                -f https_enforced=true
+      7. **Verify in a real browser, not just curl.** Check that fonts
+         actually load (`document.fonts`), the background video plays,
+         flyers render, and no request 404s. Status codes alone missed
+         exactly this class of bug on the project-URL deploy.
+      8. **Check the absolute URLs.** `site.url` in `src/_data/site.json`
+         is already `https://braindead.live`, so canonical tags, og:url,
+         og:image, sitemap.xml and robots.txt become correct only after
+         the cutover — they are currently wrong on the project URL.
+      9. **Re-test the third-party links** once live: the Mailchimp form
+         (which has never been submitted end to end), the Tickettailor
+         CTA, and the Instagram/Facebook DM links.
+     10. **Consider redirects.** Old Squarespace URLs were
+         `/calendar/<slug>` without a trailing slash and there was a
+         `/calendar` listing page, which no longer exists. GitHub Pages
+         cannot do server-side redirects, so anything that matters needs
+         an HTML page with a meta refresh, or accept the 404s.
+
+      Note: because CSS asset URLs are relative rather than
+      prefix-substituted, no code changes should be needed for the
+      switch — only configuration.
 - [ ] **"Coming up" is empty with current data.** The snapshot has one
       upcoming event (2026-09-26) and 45 past, so the section is hidden
       entirely. Resolves itself once ingest feeds real dates.
