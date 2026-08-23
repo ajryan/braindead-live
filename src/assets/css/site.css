@@ -6,22 +6,22 @@
 
 @font-face {
   font-family: 'Shrikhand';
-  src: url('/assets/fonts/shrikhand-400.woff2') format('woff2');
+  src: url('../fonts/shrikhand-400.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Bitter';
-  src: url('/assets/fonts/bitter-400.woff2') format('woff2');
+  src: url('../fonts/bitter-400.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Bitter';
-  src: url('/assets/fonts/bitter-700.woff2') format('woff2');
+  src: url('../fonts/bitter-700.woff2') format('woff2');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Bitter';
-  src: url('/assets/fonts/bitter-400-italic.woff2') format('woff2');
+  src: url('../fonts/bitter-400-italic.woff2') format('woff2');
   font-weight: 400; font-style: italic; font-display: swap;
 }
 
@@ -489,5 +489,5 @@ body.landing { overflow-x: clip; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lp-video { display: none; }
-  .lp { background: var(--ink) url("/assets/video/hero-poster.jpg") center/cover no-repeat; }
+  .lp { background: var(--ink) url("../video/hero-poster.jpg") center/cover no-repeat; }
 }
