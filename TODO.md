@@ -66,26 +66,37 @@ Read `AGENTS.md` before touching anything.
 
 ## Next
 
-- [ ] **Event ingest pipeline.** The calendar person cannot work in the
-      repo, so events need to come from somewhere they already publish.
-      Nothing is wired up yet — `events.json` is a frozen snapshot of the
-      mirror and refreshes only when the extractor is re-run by hand.
-      Findings:
-      - The Facebook Graph API **cannot** do this. `/{page-id}/events` is
-        a restricted edge, Meta is not accepting access requests, and the
-        `events` edge no longer appears on the Page node at all.
-      - The FetchRSS bridge feed now sends `Access-Control-Allow-Origin: *`
-        (verified in a real browser), but it carries Facebook *posts*, not
-        events: roughly 4 of 15 entries are shows, dates appear only as
-        prose in inconsistent formats, and flyer URLs are signed fbcdn
-        links that expire within days.
-      - So the feed is an **intake, not a database**: poll, extract event
-        fields from post text, download flyers, write drafts into
-        `events.json`, have a human confirm, then build. Ingest must
-        accumulate, since the feed is a small rolling window.
-      - Tickettailor (`tickettailor.com/events/braindeadlive`) has a real
-        API and is a better source for ticketed shows, though it will not
-        cover free ones.
+- [x] **Event ingest from Facebook.** `tools/ingest-facebook.py`, run by
+      the deploy workflow every 6 hours and on manual dispatch, then
+      auto-committed.
+
+      The venue's public events tab server-renders a GraphQL payload with
+      real structured Event nodes - id, name, venue + city,
+      `day_time_sentence`, `is_canceled`, canonical URL, cover image. That
+      sidesteps the FetchRSS post feed entirely: no prose parsing, no LLM,
+      no 4-in-15 signal problem. Verified reachable from a GitHub runner
+      (Azure IP), not just from a home connection.
+
+      Safety properties, all tested:
+      - **Merges additively, never deletes.** Only *upcoming* events are
+        server-rendered; the Past collection is lazy-loaded. A missing
+        event means "not upcoming", not "deleted".
+      - **Dedupes against existing events** by start date plus title-token
+        overlap, so the Squarespace-era entries get enriched with `fbId`
+        rather than duplicated, keeping their flyer, body and ticket link.
+      - **Any failure is a no-op.** Unreachable host or changed page shape
+        both leave `events.json` byte-identical and exit 0. The site can
+        never break because Facebook changed something.
+      - **Cover images are downloaded at ingest**, since fbcdn URLs are
+        signed and expire within days.
+      - Idempotent: re-running with no upstream change writes nothing.
+
+      Caveat worth remembering: this is undocumented internal GraphQL, not
+      an API contract, and scraping is against Facebook's ToS. It is the
+      venue's own public page, but expect it to break eventually - it will
+      fail safe when it does. `content/overrides.json` stays authoritative
+      for hand corrections.
+
 - [ ] **Move to the custom domain `braindead.live`.** Currently deployed
       to the project URL `https://ajryan.github.io/braindead-live/`, which
       builds with `PATH_PREFIX=/braindead-live`. Full cutover:
@@ -158,7 +169,10 @@ Read `AGENTS.md` before touching anything.
 - [ ] Video embed on the homepage (was `SQUARESPACE_CONTEXT`-driven).
 - [ ] Optional: a "Latest from Facebook" strip fetched client-side from
       the FetchRSS feed — the one use where a reverse-chronological post
-      feed is the correct shape.
+      feed is the correct shape. (Events no longer need it.)
+- [ ] Ingest sets `end` to null for new Facebook events, since the events
+      tab gives no end time. Existing events keep theirs. Decide whether to
+      default to a duration or leave end times absent for new shows.
 - [ ] Landing page weighs ~3.2 MB, almost all video. If it is going on a
       QR code for people on venue cell service, a 12s loop would halve it.
 - [ ] Add stylelint + an HTML linter. Safe now: the whitespace-sensitivity

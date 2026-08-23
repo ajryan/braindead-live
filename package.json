@@ -2,13 +2,14 @@
   "name": "braindead-live",
   "version": "0.1.0",
   "private": true,
-  "description": "braindead.live — Frederick, MD live music venue site",
+  "description": "braindead.live \u2014 Frederick, MD live music venue site",
   "type": "module",
   "scripts": {
     "extract": "python3 tools/extract-events.py reference/braindead.live",
     "build": "eleventy",
     "serve": "eleventy --serve",
-    "clean": "rm -rf _site"
+    "clean": "rm -rf _site",
+    "ingest": "python3 tools/ingest-facebook.py"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0"
