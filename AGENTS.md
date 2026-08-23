@@ -43,7 +43,8 @@ date, venue, description). There is no build system — this is raw output.
    icon/page (the site sells nothing). CSS was reformatted with Prettier.
 
 3. Rebuilt as an Eleventy site: 46 event pages generated from one template
-   plus extracted data, zero client JavaScript, self-hosted fonts, and a
+   plus extracted data, no first-party JavaScript (the only script is
+   the deferred Umami analytics tag), self-hosted fonts, and a
    real responsive-image pipeline. The mirror moved to `reference/`.
 
 Verified findings worth not re-deriving:
