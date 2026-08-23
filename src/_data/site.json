@@ -1,0 +1,36 @@
+{
+  "title": "Brain Dead Live",
+  "url": "https://braindead.live",
+  "description": "Live music in Frederick, MD",
+  "email": "braindeadlivemd@gmail.com",
+  "instagram": "https://www.instagram.com/brain.dead.live/",
+  "facebook": "https://www.facebook.com/profile.php?id=61559195090068",
+  "contactEndpoint": null,
+  "socials": [
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/brain.dead.live/"
+    },
+    {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/profile.php?id=61559195090068"
+    },
+    {
+      "name": "SoundCloud",
+      "url": "https://soundcloud.com/braindead-live"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://www.youtube.com/@BrainDeadLive"
+    }
+  ],
+  "mailchimp": {
+    "action": "https://live.us3.list-manage.com/subscribe/post",
+    "u": "7da2a0439c6a52a792d36f098",
+    "id": "312bc5fdbb",
+    "ht": "ec142072cc35bc583829e69d802f8206ca33b70f:MTc3ODc2NzAyMy44NzY=",
+    "groupField": "group[27871][1]"
+  },
+  "instagramDM": "https://ig.me/m/brain.dead.live",
+  "facebookDM": "https://m.me/61559195090068"
+}

@@ -1,0 +1,20 @@
+{# Liquid-warp filter for the logo. feTurbulence generates fractal noise;
+   feDisplacementMap pushes pixels along it. Animating the noise makes the
+   distortion crawl, which reads as an ooze. Declarative SVG - no JS. #}
+<svg class="filter-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="ooze" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.017" numOctaves="3" seed="7" result="noise">
+        <animate attributeName="baseFrequency" dur="19s" repeatCount="indefinite"
+                 values="0.011 0.017; 0.019 0.009; 0.008 0.021; 0.011 0.017"
+                 calcMode="spline" keyTimes="0;0.34;0.67;1"
+                 keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" result="warp">
+        <animate attributeName="scale" dur="11s" repeatCount="indefinite"
+                 values="6; 15; 9; 6" calcMode="spline" keyTimes="0;0.35;0.7;1"
+                 keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"/>
+      </feDisplacementMap>
+    </filter>
+  </defs>
+</svg>

@@ -1,0 +1,11 @@
+---
+pagination:
+  data: calendar.all
+  size: 1
+  alias: event
+permalink: "/calendar/{{ event.slug }}/index.html"
+layout: layouts/event.njk
+eleventyComputed:
+  title: "{{ event.title }}"
+  ogImage: "{{ event.flyer }}"
+---

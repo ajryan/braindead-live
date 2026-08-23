@@ -1,0 +1,8 @@
+node_modules/
+_site/
+.DS_Store
+
+# Local-only: the original wget mirror, kept as a visual reference.
+# Already present in git history (pre-existing commits); this only stops
+# future changes to it being tracked.
+reference/

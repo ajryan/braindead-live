@@ -1,0 +1,10 @@
+<li class="event-card">
+  <a class="event-card-link" href="{{ e.url | url }}">
+    {% if e.flyer %}{{ e.cardHtml | safe }}{% endif %}
+    <div class="event-card-text">
+      <p class="event-card-date"><time datetime="{{ e.start }}">{{ e.start | day }}</time></p>
+      <h4>{{ e.title }}</h4>
+      {% if e.location %}<p class="event-card-where">{{ e.location }}</p>{% endif %}
+    </div>
+  </a>
+</li>

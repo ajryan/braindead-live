@@ -1,0 +1,138 @@
+---
+layout: layouts/base.njk
+permalink: /home.html
+description: Live music in Frederick, MD.
+marquee: true
+---
+{% if calendar.next %}
+<section class="next-show">
+  {% include "partials/ooze-filter.njk" %}
+  <img class="oozing-logo" src="{{ "/assets/img/logo.png" | url }}" alt="" aria-hidden="true"
+       width="750" height="750" decoding="async">
+  <h2>Next show</h2>
+  <div class="next-show-link">
+    {{ calendar.next.cardHtml | safe }}
+    <div class="next-show-text">
+      <p class="event-card-date">{{ calendar.next.start | day }}</p>
+      {# Stretched link: the whole card is clickable, but the ticket button
+         sits above it on its own z-index so it stays separately clickable.
+         Avoids nesting <a> inside <a>, which is invalid HTML. #}
+      <h3><a class="stretched" href="{{ calendar.next.url | url }}">{{ calendar.next.title }}</a></h3>
+      {% if calendar.next.location %}<p class="event-card-where">{{ calendar.next.location }}</p>{% endif %}
+      {% if calendar.next.ticketUrl %}
+      <p class="next-show-cta"><a class="btn" href="{{ calendar.next.ticketUrl }}" rel="noopener">Buy tickets</a></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% set rest = calendar.upcoming | slice_after_first %}
+{% if rest.length %}
+<section class="shows" id="shows">
+  <h2>Coming up</h2>
+  <ul class="event-list">
+    {% for e in rest %}{% include "partials/event-card.njk" %}{% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {# duplicated so translateX(-50%) loops seamlessly #}
+    <span>brain dead live&nbsp;</span><span>brain dead live&nbsp;</span><span>brain dead live&nbsp;</span>
+    <span>brain dead live&nbsp;</span><span>brain dead live&nbsp;</span><span>brain dead live&nbsp;</span>
+  </div>
+</section>
+
+<section class="mailing" id="mailing-list">
+  <h2>Join Our Mailing List</h2>
+  {# Mailchimp embed, recovered from the Squarespace original (list us3 / 312bc5fdbb). #}
+  <form class="form form--inline" action="{{ site.mailchimp.action }}" method="post" target="_blank">
+    <input type="hidden" name="u" value="{{ site.mailchimp.u }}">
+    <input type="hidden" name="id" value="{{ site.mailchimp.id }}">
+    <input type="hidden" name="ht" value="{{ site.mailchimp.ht }}">
+    <input type="hidden" name="mc_signupsource" value="hosted">
+
+    <div class="field-row">
+      <p class="field">
+        <label for="ml-first">First name</label>
+        <input id="ml-first" name="MERGE1" type="text" autocomplete="given-name" required>
+      </p>
+      <p class="field">
+        <label for="ml-last">Last name</label>
+        <input id="ml-last" name="MERGE2" type="text" autocomplete="family-name">
+      </p>
+    </div>
+    <p class="field">
+      <label for="ml-email">Email address</label>
+      <input id="ml-email" name="MERGE0" type="email" autocomplete="email" required>
+    </p>
+    <p class="field field--check">
+      <input id="ml-optin" name="{{ site.mailchimp.groupField }}" type="checkbox" value="1">
+      <label for="ml-optin">Subscribe to access exclusive deals and content</label>
+    </p>
+
+    {# Mailchimp bot trap — real users never see or fill these. #}
+    <div class="hp" aria-hidden="true">
+      <input type="text" name="b_name" tabindex="-1" autocomplete="off" value="">
+      <input type="email" name="b_email" tabindex="-1" autocomplete="off" value="">
+      <input type="text" name="b_comment" tabindex="-1" autocomplete="off">
+    </div>
+
+    <p><button class="btn" type="submit">Subscribe</button></p>
+  </form>
+</section>
+
+<section class="team" id="team">
+  <h2>The Team</h2>
+  <ul class="team-list">
+    {% for m in teamPhotos %}
+    <li class="team-member">
+      {{ m.photoHtml | safe }}
+      <h3>{{ m.name }}</h3>
+      <p class="team-role">{{ m.role }}</p>
+      <p class="team-bio">{{ m.bio }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Contact Us</h2>
+  <div class="contact-grid">
+    <p class="contact-intro">Interested in working together? Fill out some info and we will be in touch shortly. We can&rsquo;t wait to hear from you! &#129504;&#128128;&#9889;</p>
+    {% if site.contactEndpoint %}
+    <form class="form" action="{{ site.contactEndpoint }}" method="post">
+      <div class="field-row">
+        <p class="field">
+          <label for="c-first">First name</label>
+          <input id="c-first" name="firstName" type="text" autocomplete="given-name" required>
+        </p>
+        <p class="field">
+          <label for="c-last">Last name</label>
+          <input id="c-last" name="lastName" type="text" autocomplete="family-name">
+        </p>
+      </div>
+      <p class="field">
+        <label for="c-phone">Phone</label>
+        <input id="c-phone" name="phone" type="tel" autocomplete="tel">
+      </p>
+      <p class="field">
+        <label for="c-email">Email</label>
+        <input id="c-email" name="email" type="email" autocomplete="email" required>
+      </p>
+      <p class="field">
+        <label for="c-msg">What would you like to discuss?</label>
+        <textarea id="c-msg" name="message" rows="5" required></textarea>
+      </p>
+      <p><button class="btn" type="submit">Send</button></p>
+    </form>
+    {% else %}
+    <p class="contact-actions">
+      <a class="btn btn--dark" href="{{ site.instagramDM }}" rel="noopener">Message us on Instagram</a>
+      <a class="btn btn--dark" href="{{ site.facebookDM }}" rel="noopener">Message us on Facebook</a>
+    </p>
+    {% endif %}
+  </div>
+</section>

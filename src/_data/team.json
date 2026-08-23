@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "dylan-zingg",
+    "name": "Dylan Zingg",
+    "role": "Co-Founder, Creative Director",
+    "bio": "I handle our negotiations and approvals, community partnerships, and event and venue coordination.",
+    "photo": "content/team/dylan-zingg.jpg"
+  },
+  {
+    "slug": "tony-gianni",
+    "name": "Tony Gianni",
+    "role": "Co-Founder",
+    "bio": "Our name\u2019s a spin on my decade-long graphic design practice called Brain Dead Design Co. - now we do shows.",
+    "photo": "content/team/tony-gianni.jpg"
+  },
+  {
+    "slug": "jeremiah-johnston",
+    "name": "Jeremiah Johnston",
+    "role": "Co-Owner, General Manager",
+    "bio": "Your friendly neighborhood troubador. I bring people together and keep everyone on track.",
+    "photo": "content/team/jeremiah-johnston.jpg"
+  },
+  {
+    "slug": "aidan-ryan",
+    "name": "Aidan Ryan",
+    "role": "Co-Owner, Sound Engineer",
+    "bio": "I\u2019m your man for audio quality. We fine tune our audio equipment each show to get the best out of any room.",
+    "photo": "content/team/aidan-ryan.jpg"
+  }
+]

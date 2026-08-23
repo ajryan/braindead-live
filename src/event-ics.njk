@@ -1,0 +1,20 @@
+---
+pagination:
+  data: calendar.all
+  size: 1
+  alias: event
+permalink: "/calendar/{{ event.slug }}.ics"
+eleventyExcludeFromCollections: true
+---
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Brain Dead Live//braindead.live//EN
+BEGIN:VEVENT
+UID:{{ event.uid or event.slug }}
+DTSTART:{{ event.start | icsStamp }}
+DTEND:{{ event.end | icsStamp }}
+SUMMARY:{{ event.title | icsEscape | safe }}
+{% if event.location %}LOCATION:{{ event.location | icsEscape | safe }}
+{% endif %}URL:{{ site.url }}/calendar/{{ event.slug }}/
+END:VEVENT
+END:VCALENDAR

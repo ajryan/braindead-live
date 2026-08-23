@@ -1,0 +1,85 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish; queue at most one more.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Shallow: the wget mirror is gitignored at HEAD but still sits in
+          # older commits (~101 MB). Depth 1 avoids ever fetching it.
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Cache generated images
+        # eleventy-img skips work when the output file already exists, so
+        # restoring _site/img turns a ~50s cold build into a fast one.
+        uses: actions/cache@v4
+        with:
+          path: _site/img
+          key: eleventy-img-${{ hashFiles('content/flyers/**', 'content/team/**') }}
+          restore-keys: eleventy-img-
+
+      - name: Resolve base URL
+        id: base
+        run: |
+          # Set repo variable CUSTOM_DOMAIN (e.g. braindead.live) to deploy at
+          # a domain root. Without it, build for the project-page subpath.
+          if [ -n "${{ vars.CUSTOM_DOMAIN }}" ]; then
+            echo "path_prefix=" >> "$GITHUB_OUTPUT"
+            echo "Deploying to custom domain: ${{ vars.CUSTOM_DOMAIN }}"
+          else
+            echo "path_prefix=/${GITHUB_REPOSITORY#*/}" >> "$GITHUB_OUTPUT"
+            echo "Deploying to project page: /${GITHUB_REPOSITORY#*/}"
+          fi
+
+      - name: Build
+        env:
+          PATH_PREFIX: ${{ steps.base.outputs.path_prefix }}
+        run: npm run build
+
+      - name: Write CNAME
+        if: vars.CUSTOM_DOMAIN != ''
+        run: echo "${{ vars.CUSTOM_DOMAIN }}" > _site/CNAME
+
+      - name: Disable Jekyll
+        # Pages ignores files starting with "_" unless this exists.
+        run: touch _site/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

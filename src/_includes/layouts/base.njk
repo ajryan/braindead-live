@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if title %}{{ title }} &mdash; {% endif %}{{ site.title }}</title>
+<meta name="description" content="{{ description or site.description }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{{ title or site.title }}">
+<meta property="og:description" content="{{ description or site.description }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{% if ogImage %}<meta property="og:image" content="{{ site.url }}{{ ogImage }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="{{ "/assets/fonts/shrikhand-400.woff2" | url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/assets/fonts/bitter-400.woff2" | url }}" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="{{ "/assets/icons/favicon.ico" | url }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/icons/favicon-32.png" | url }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/icons/favicon-16.png" | url }}">
+<link rel="apple-touch-icon" href="{{ "/assets/icons/apple-touch-icon.png" | url }}">
+<link rel="manifest" href="{{ "/site.webmanifest" | url }}">
+<link rel="stylesheet" href="{{ "/assets/css/site.css" | url }}">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="{{ "/home.html" | url }}">{{ site.title }}</a>
+    <nav aria-label="Social">
+      {% include "partials/socials.njk" %}
+    </nav>
+  </div>
+</header>
+<main id="main">
+{{ content | safe }}
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="display">{{ site.title }}</p>
+    {% include "partials/socials.njk" %}
+  </div>
+</footer>
+</body>
+</html>

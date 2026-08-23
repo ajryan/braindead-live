@@ -1,0 +1,30 @@
+---
+layout: layouts/base.njk
+---
+<article class="event">
+  <p class="backlink"><a href="{{ "/home.html" | url }}">&larr; Back to Brain Dead Live</a></p>
+  <header class="event-head">
+    <h1>{{ event.title }}</h1>
+    <p class="event-when">
+      <time datetime="{{ event.start }}">{{ event.start | day }}</time>
+      <span class="event-time">{{ event.start | clock }}{% if event.end %} &ndash; {{ event.end | clock }}{% endif %}</span>
+    </p>
+    {% if event.location %}<p class="event-where">{{ event.location }}</p>{% endif %}
+    {% if event.ticketUrl %}<p class="event-tickets"><a class="btn" href="{{ event.ticketUrl }}" rel="noopener">Tickets</a></p>{% endif %}
+  </header>
+
+  {% if event.flyer %}
+  {{ event.flyerHtml | safe }}
+  {% endif %}
+
+  <div class="event-body">{{ event.body_html | safe }}</div>
+
+  {% if event.lineup.length %}
+  <section class="lineup">
+    <h2>Lineup</h2>
+    <ul>{% for a in event.lineup %}<li><a href="{{ a.url }}" rel="noopener">@{{ a.handle }}</a></li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  <p class="ics"><a href="{{ ("/calendar/" + event.slug + ".ics") | url }}">Add to calendar (.ics)</a></p>
+</article>
