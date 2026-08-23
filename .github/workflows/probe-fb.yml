@@ -1,0 +1,29 @@
+name: Probe Facebook events page from CI
+on: workflow_dispatch
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch the events tab as a browser would
+        run: |
+          UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          URL="https://www.facebook.com/profile.php?id=61559195090068&sk=events"
+          code=$(curl -sS -A "$UA" \
+            -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+            -H "Accept-Language: en-US,en;q=0.9" \
+            -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: none" \
+            -H "Upgrade-Insecure-Requests: 1" \
+            -L -o page.html -w "%{http_code}" "$URL")
+          echo "HTTP:  $code"
+          echo "bytes: $(wc -c < page.html)"
+          echo "--- does it contain structured Event nodes? ---"
+          echo "Event nodes:      $(grep -o '"__typename":"Event"' page.html | wc -l)"
+          echo "day_time_sentence:$(grep -o 'day_time_sentence' page.html | wc -l)"
+          echo "event_place:      $(grep -o 'event_place' page.html | wc -l)"
+          echo "--- blocked / challenged? ---"
+          echo "login wall:  $(grep -oic 'you must log in' page.html || true)"
+          echo "captcha:     $(grep -oic 'captcha' page.html || true)"
+          echo "unusual act: $(grep -oic 'unusual activity\|temporarily blocked' page.html || true)"
+          echo "--- title ---"
+          grep -oE '<title>[^<]*</title>' page.html | head -2 || echo "(none)"
