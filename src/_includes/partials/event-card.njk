@@ -1,5 +1,7 @@
 <li class="event-card">
-  <a class="event-card-link" href="{{ e.url | url }}">
+  <a class="event-card-link" href="{{ e.url | url }}"
+    data-umami-event="event-open" data-umami-event-placement="card"
+    data-umami-event-slug="{{ e.slug }}">
     {% if e.flyer %}{{ e.cardHtml | safe }}{% endif %}
     <div class="event-card-text">
       <p class="event-card-date"><time datetime="{{ e.start }}">{{ e.start | day }}</time></p>

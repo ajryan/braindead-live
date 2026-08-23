@@ -10,7 +10,10 @@ layout: layouts/base.njk
       <span class="event-time">{{ event.start | clock }}{% if event.end %} &ndash; {{ event.end | clock }}{% endif %}</span>
     </p>
     {% if event.location %}<p class="event-where">{{ event.location }}</p>{% endif %}
-    {% if event.ticketUrl %}<p class="event-tickets"><a class="btn" href="{{ event.ticketUrl }}" rel="noopener">Tickets</a></p>{% endif %}
+    {% if event.ticketUrl %}<p class="event-tickets"><a class="btn" href="{{ event.ticketUrl }}" rel="noopener"
+      data-umami-event="buy-tickets"
+      data-umami-event-placement="event-page"
+      data-umami-event-slug="{{ event.slug }}">Tickets</a></p>{% endif %}
   </header>
 
   {% if event.flyer %}
@@ -22,9 +25,11 @@ layout: layouts/base.njk
   {% if event.lineup.length %}
   <section class="lineup">
     <h2>Lineup</h2>
-    <ul>{% for a in event.lineup %}<li><a href="{{ a.url }}" rel="noopener">@{{ a.handle }}</a></li>{% endfor %}</ul>
+    <ul>{% for a in event.lineup %}<li><a href="{{ a.url }}" rel="noopener"
+      data-umami-event="lineup-artist" data-umami-event-handle="{{ a.handle }}">@{{ a.handle }}</a></li>{% endfor %}</ul>
   </section>
   {% endif %}
 
-  <p class="ics"><a href="{{ ("/calendar/" + event.slug + ".ics") | url }}">Add to calendar (.ics)</a></p>
+  <p class="ics"><a href="{{ ("/calendar/" + event.slug + ".ics") | url }}"
+     data-umami-event="ics-download" data-umami-event-slug="{{ event.slug }}">Add to calendar (.ics)</a></p>
 </article>

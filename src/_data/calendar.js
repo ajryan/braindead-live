@@ -39,6 +39,16 @@ function ticketUrl(e) {
   return url.toString();
 }
 
+// Ticket links also appear inline in the event body prose, not just as
+// buttons. Tag those too, so "buy-tickets" counts every real ticket click.
+function tagTicketLinks(html, slug) {
+  return html.replace(/<a\s+href="(https?:\/\/[^"]+)"/gi, (m, href) =>
+    TICKET_HOSTS.test(href)
+      ? `<a data-umami-event="buy-tickets" data-umami-event-placement="body" data-umami-event-slug="${slug}" href="${href}"`
+      : m
+  );
+}
+
 export default async function () {
   const raw = JSON.parse(
     await readFile(new URL('./events.json', import.meta.url), 'utf8')
@@ -51,6 +61,7 @@ export default async function () {
   const events = await Promise.all(raw.map(async (e) => ({
     ...e,
     ...(overrides[e.slug] || {}),
+    body_html: tagTicketLinks(e.body_html || '', e.slug),
     url: `/calendar/${e.slug}/`,
     lineup: lineup(e.body_html),
     ticketUrl: (overrides[e.slug] || {}).ticketUrl || ticketUrl(e),

@@ -32,9 +32,21 @@ Read `AGENTS.md` before touching anything.
       first-party JavaScript** — the only script is the deferred Umami
       analytics tag. Verified 0 console errors / 0 failed requests across
       all 48 pages.
-- [x] Umami analytics (`cloud.umami.is`), deferred, in the head of every
-      page. Website id lives in `src/_data/site.json`; clearing it removes
+- [x] Umami analytics (`cloud.umami.is`), deferred, in the head of all 48
+      pages. Website id lives in `src/_data/site.json`; clearing it removes
       the tag everywhere.
+- [x] Umami event tags on the links worth tracking:
+      - `buy-tickets` — every ticket link, including the ones inline in
+        event body prose, not just the buttons. Carries `placement`
+        (landing / next-show / event-page / body) and `slug`.
+      - `event-open` — flyer, next-show title and calendar cards, with
+        `placement` and `slug`.
+      - `newsletter-subscribe`, `contact-dm` (with `network`).
+      - `ics-download` with `slug` — a strong intent signal.
+      - `lineup-artist` with `handle` — which artists pull clicks.
+      - `social-instagram` / `-facebook` / `-soundcloud` / `-youtube`,
+        with `placement` for header vs footer.
+      - `landing-continue` — the splash-to-site funnel.
 - [x] 46 event pages from one template + extracted data.
 - [x] Real CSS layout — no Fluid Engine `container-styles` /
       `transform-vars` soup, no vendor bundles.

@@ -17,10 +17,15 @@ marquee: true
       {# Stretched link: the whole card is clickable, but the ticket button
          sits above it on its own z-index so it stays separately clickable.
          Avoids nesting <a> inside <a>, which is invalid HTML. #}
-      <h3><a class="stretched" href="{{ calendar.next.url | url }}">{{ calendar.next.title }}</a></h3>
+      <h3><a class="stretched" href="{{ calendar.next.url | url }}"
+             data-umami-event="event-open" data-umami-event-placement="next-show"
+             data-umami-event-slug="{{ calendar.next.slug }}">{{ calendar.next.title }}</a></h3>
       {% if calendar.next.location %}<p class="event-card-where">{{ calendar.next.location }}</p>{% endif %}
       {% if calendar.next.ticketUrl %}
-      <p class="next-show-cta"><a class="btn" href="{{ calendar.next.ticketUrl }}" rel="noopener">Buy tickets</a></p>
+      <p class="next-show-cta"><a class="btn" href="{{ calendar.next.ticketUrl }}" rel="noopener"
+     data-umami-event="buy-tickets"
+     data-umami-event-placement="next-show"
+     data-umami-event-slug="{{ calendar.next.slug }}">Buy tickets</a></p>
       {% endif %}
     </div>
   </div>
@@ -80,7 +85,7 @@ marquee: true
       <input type="text" name="b_comment" tabindex="-1" autocomplete="off">
     </div>
 
-    <p><button class="btn" type="submit">Subscribe</button></p>
+    <p><button class="btn" type="submit" data-umami-event="newsletter-subscribe">Subscribe</button></p>
   </form>
 </section>
 
@@ -130,8 +135,10 @@ marquee: true
     </form>
     {% else %}
     <p class="contact-actions">
-      <a class="btn btn--dark" href="{{ site.instagramDM }}" rel="noopener">Message us on Instagram</a>
-      <a class="btn btn--dark" href="{{ site.facebookDM }}" rel="noopener">Message us on Facebook</a>
+      <a class="btn btn--dark" href="{{ site.instagramDM }}" rel="noopener"
+         data-umami-event="contact-dm" data-umami-event-network="instagram">Message us on Instagram</a>
+      <a class="btn btn--dark" href="{{ site.facebookDM }}" rel="noopener"
+         data-umami-event="contact-dm" data-umami-event-network="facebook">Message us on Facebook</a>
     </p>
     {% endif %}
   </div>
