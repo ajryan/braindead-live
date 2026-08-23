@@ -1,6 +1,26 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+
 // GitHub Pages project sites serve from /<repo>/, so every root-absolute
 // URL needs prefixing. Set PATH_PREFIX in CI; empty for a custom domain.
 const PATH_PREFIX = process.env.PATH_PREFIX || '';
+
+// Cache-bust by content hash, not by build time: the URL changes only when
+// the file's bytes change, so unchanged assets keep their cached copy.
+const hashes = new Map();
+function contentHash(siteRootPath) {
+  if (hashes.has(siteRootPath)) return hashes.get(siteRootPath);
+  const file = path.join('src', siteRootPath.replace(/^\//, ''));
+  let h = '';
+  try {
+    h = createHash('sha256').update(readFileSync(file)).digest('hex').slice(0, 8);
+  } catch {
+    h = ''; // asset generated at build time rather than checked in
+  }
+  hashes.set(siteRootPath, h);
+  return h;
+}
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
@@ -37,6 +57,11 @@ export default function (eleventyConfig) {
 
   // The first upcoming show is rendered as the highlight; this yields the rest.
   eleventyConfig.addFilter('slice_after_first', (arr) => (arr || []).slice(1));
+
+  eleventyConfig.addFilter('bust', (url) => {
+    const h = contentHash(url);
+    return h ? `${url}?v=${h}` : url;
+  });
 
   return {
     pathPrefix: PATH_PREFIX ? `${PATH_PREFIX}/` : '/',
