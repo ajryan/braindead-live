@@ -32,12 +32,40 @@
   --ink: #211a1d;          /* black-bold section background */
   --ink-deep: #1a1316;     /* subtly deeper tone for alternating sections */
   --cream: #f9f0fb;        /* body text on dark */
-  --peri: #8075ff;         /* headings, buttons, marquee */
+  /* Two periwinkles. --peri is the SAFE DEFAULT: it clears WCAG AA on the
+     ink background at any size, so plain `color: var(--peri)` is never a
+     contrast bug. --peri-deep is the saturated brand colour matched to the
+     original site; it is for fills, bands, borders and large display type,
+     and for text on LIGHT backgrounds where the darker value is the safer
+     one. Small text on ink must use --peri (--peri-deep is 4.34:1 there). */
+  --peri: #9d95ff;         /* AA on ink at any size - default for text  */
+  --peri-deep: #8075ff;    /* brand fills, bands, borders, display type */
   --violet: #6321ee;       /* deep accent */
   --sage: #cad5ca;         /* site background behind sections */
   --muted: rgb(249, 240, 251, .62);
+  /* Type scale: five steps, replacing nineteen ad-hoc values. Every step
+     is perceptible - the smallest is 1.15x. --text-lg and --text-xl are
+     matched to the original Squarespace design. */
+  --text-xs:   0.8rem;                        /* 12.8  - meta, labels, eyebrows */
+  --text-body: 0.92rem;                       /* 14.72 - all body and UI text   */
+  --text-md:   1.25rem;                       /* 20    - card titles, subheads  */
+  --text-lg:   1.48rem;                       /* 23.68 - brand, minor headings  */
+  --text-xl:   clamp(1.75rem, 4vw, 2.73rem);  /* ->43.68 - section headings     */
+
   --display: 'Shrikhand', Georgia, serif;
   --body: 'Bitter', Georgia, serif;
+  /* Spacing scale. Spacing encodes relationship: tight within a group,
+     wide between unrelated blocks. The old stylesheet separated every
+     section by an identical 72px, which spent the signal on nothing. */
+  --space-3xs: 0.25rem;   /* 4  */
+  --space-2xs: 0.5rem;    /* 8  */
+  --space-xs:  0.75rem;   /* 12 */
+  --space-sm:  1rem;      /* 16 */
+  --space-md:  1.5rem;    /* 24 */
+  --space-lg:  2.5rem;    /* 40 */
+  --space-xl:  4rem;      /* 64 */
+  --space-2xl: 6rem;      /* 96 */
+
   --maxw: 68rem;
   --pill: 300px;
 }
@@ -48,7 +76,7 @@ body {
   margin: 0; overflow-x: clip;
   background: var(--ink);
   color: var(--cream);
-  font: 400 16px/1.6 var(--body);
+  font: 400 var(--text-body)/1.6 var(--body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -61,16 +89,16 @@ h1, h2, h3, .brand, .display {
   font-weight: 400;
   letter-spacing: -.02em;
   line-height: 1.05;
-  color: var(--peri);
-  margin: 0 0 .5em;
+  color: var(--peri-deep);
+  margin: 0 0 var(--space-md);
 }
 h1 { font-size: clamp(2rem, 5.5vw, 2.73rem); }
-h2 { font-size: clamp(1.75rem, 4vw, 2.73rem); }
-h3 { font-size: 1.35rem; }
+h2 { font-size: var(--text-xl); }
+h3 { font-size: var(--text-md); }
 
 .skip {
   position: absolute; left: -9999px;
-  background: var(--peri); color: var(--cream);
+  background: var(--peri-deep); color: var(--cream);
   padding: .8rem 1.4rem; border-radius: var(--pill);
 }
 .skip:focus { left: 1rem; top: 1rem; z-index: 10; }
@@ -78,20 +106,20 @@ h3 { font-size: 1.35rem; }
 /* ---- header ---- */
 /* Sizing measured off the live site: brand 23.68px / -0.02em, icons 35px,
    ~21.5px apart, both sitting on the same 9px top edge. */
-.site-header { background: var(--peri); padding: .56rem clamp(1.25rem, 4vw, 3.2rem) .62rem; }
+.site-header { background: var(--peri-deep); padding: .56rem clamp(1.25rem, 4vw, 3.2rem) .62rem; }
 .site-header-inner {
   max-width: none;
   display: flex; flex-wrap: wrap; gap: .75rem 1.5rem;
   align-items: center; justify-content: space-between;
 }
-.brand { font-size: 1.48rem; line-height: 1.44; margin: 0; text-decoration: none; color: var(--cream); }
+.brand { font-size: var(--text-lg); line-height: 1.44; margin: 0; text-decoration: none; color: var(--cream); }
 .site-header nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 
 /* ---- marquee: native CSS replacement for the Squarespace context-driven one ---- */
 .marquee {
   /* full-bleed from inside the centred <main> */
   margin-inline: calc(50% - 50vw); width: 100vw;
-  margin-block: 4.5rem;
+  margin-block: var(--space-xl) var(--space-2xl);
   overflow: hidden;
   padding: .4rem 0 .8rem;
   user-select: none;
@@ -110,7 +138,7 @@ h3 { font-size: 1.35rem; }
   font-size: clamp(3.5rem, 11.5vw, 11.56rem);
   letter-spacing: -.02em;
   line-height: 1.1;
-  color: var(--peri);
+  color: var(--peri-deep);
   padding-right: .35em;
   white-space: nowrap;
 }
@@ -125,25 +153,25 @@ h3 { font-size: 1.35rem; }
 /* ---- buttons ---- */
 .btn {
   display: inline-block;
-  font: 400 1rem/1 var(--body);
-  background: var(--peri); color: var(--cream);
+  font: 400 var(--text-body)/1 var(--body);
+  background: var(--peri-deep); color: var(--cream);
   padding: 1.2rem 2rem; border-radius: var(--pill);
-  text-decoration: none; border: 1px solid var(--peri);
+  text-decoration: none; border: 1px solid var(--peri-deep);
   transition: background .15s, color .15s;
 }
 .btn:hover { background: transparent; color: var(--peri); }
 .btn--ghost { background: transparent; color: var(--peri); }
 /* True black, outlined — --ink is the page background, so an unbordered
    dark button would have no visible shape against it. */
-.btn--dark { background: #000; color: var(--cream); border-color: var(--peri); }
-.btn--dark:hover { background: var(--peri); color: var(--cream); border-color: var(--peri); }
-.btn--ghost:hover { background: var(--peri); color: var(--cream); }
+.btn--dark { background: #000; color: var(--cream); border-color: var(--peri-deep); }
+.btn--dark:hover { background: var(--peri-deep); color: var(--cream); border-color: var(--peri-deep); }
+.btn--ghost:hover { background: var(--peri-deep); color: var(--cream); }
 
 /* ---- layout ---- */
-main { max-width: var(--maxw); margin: 0 auto; padding: 1rem 1.25rem 0; }
-main > section:last-of-type { padding-bottom: 3.5rem; }
+main { max-width: var(--maxw); margin: 0 auto; padding: var(--space-sm) 1.25rem 0; }
+main > section:last-of-type { padding-bottom: var(--space-xl); }
 .hero { padding: 2.5rem 0 1rem; text-align: center; }
-.tagline { font-size: 1.15rem; color: var(--muted); margin: 0; }
+.tagline { font-size: var(--text-md); color: var(--muted); margin: 0; }
 .all-shows { text-align: center; margin: 3rem 0 1rem; }
 
 /* ---- event cards ---- */
@@ -160,21 +188,21 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
   border-radius: .75rem; overflow: hidden;
   transition: border-color .15s, transform .15s;
 }
-.event-card-link:hover { border-color: var(--peri); transform: translateY(-3px); }
+.event-card-link:hover { border-color: var(--peri-deep); transform: translateY(-3px); }
 .event-card-link picture, .event-card-link img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .event-card-text { padding: 1rem 1.1rem 1.2rem; }
 .event-card-date {
-  font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--peri); margin: 0 0 .4rem;
+  font-size: var(--text-xs); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--peri); margin: 0 0 var(--space-2xs);
 }
 .event-card h4 {
-  font-family: var(--body); font-weight: 700; font-size: 1rem;
-  line-height: 1.35; margin: 0 0 .35rem; color: var(--cream);
+  font-family: var(--body); font-weight: 700; font-size: var(--text-md);
+  line-height: 1.25; margin: 0 0 .35rem; color: var(--cream);
 }
-.event-card-where { font-size: .85rem; color: var(--muted); margin: 0; }
+.event-card-where { font-size: var(--text-body); color: var(--muted); margin: 0; }
 .month {
   font-family: var(--body); font-weight: 700;
-  font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+  font-size: var(--text-xs); letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); margin: 2.75rem 0 1rem;
   padding-bottom: .5rem; border-bottom: 1px solid rgb(128, 117, 255, .2);
 }
@@ -182,29 +210,32 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
 
 /* ---- event page ---- */
 .event { max-width: 46rem; margin: 0 auto; }
-.backlink { font-size: .9rem; margin: 0 0 1.5rem; }
+.backlink { font-size: var(--text-xs); margin: 0 0 1.5rem; }
 .backlink a, .ics a { color: var(--muted); text-decoration: none; }
 .backlink a:hover, .ics a:hover { color: var(--peri); }
-.event-when { font-size: 1.1rem; margin: 0 0 .25rem; }
+.event-when { font-size: var(--text-md); margin: 0 0 .25rem; }
 .event-time { color: var(--muted); margin-left: .6rem; }
 .event-where { color: var(--muted); margin: 0 0 1.25rem; }
 .event-tickets { margin: 0 0 1.5rem; }
 .flyer, .event picture { margin: 1.75rem 0; border-radius: .75rem; overflow: hidden; }
-.event-body { font-size: 1.02rem; }
+.event-body { font-size: var(--text-body); }
 .event-body p { margin: 0 0 .9rem; }
 .event-body a { text-decoration: underline; }
-.lineup h2 { font-size: 1.6rem; margin-top: 2.5rem; }
+.lineup h2 { font-size: var(--text-lg); margin-top: 2.5rem; }
 .lineup ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
 .lineup li a {
   display: inline-block; text-decoration: none;
   border: 1px solid rgb(128, 117, 255, .4); border-radius: var(--pill);
-  padding: .35rem .9rem; font-size: .9rem;
+  padding: .35rem .9rem; font-size: var(--text-xs);
 }
-.lineup li a:hover { background: var(--peri); color: var(--cream); }
-.ics { margin-top: 2.5rem; font-size: .9rem; }
+.lineup li a:hover { background: var(--peri-deep); color: var(--cream); }
+.ics { margin-top: 2.5rem; font-size: var(--text-xs); }
 
 /* ---- next show ---- */
 .next-show-link {
+  /* Capped so the card does not claim width its 46ch text column cannot
+     fill. Previously 1048px wide with content reaching about 64% of it. */
+  max-width: 54rem;
   position: relative;
   display: grid; gap: 1.5rem; align-items: center;
   grid-template-columns: minmax(0, 14.4rem) 1fr;
@@ -213,29 +244,30 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
   border: 1px solid rgb(128, 117, 255, .28);
   border-radius: .75rem; overflow: hidden;
 }
-.next-show-link:has(.stretched:hover) { border-color: var(--peri); }
-.next-show-link:has(.stretched:focus-visible) { border-color: var(--peri); }
+.next-show-link:has(.stretched:hover) { border-color: var(--peri-deep); }
+.next-show-link:has(.stretched:focus-visible) { border-color: var(--peri-deep); }
 /* Stretched link covers the card; the CTA sits above it. */
 .next-show-text .stretched { text-decoration: none; color: inherit; }
 .next-show-text .stretched::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .next-show-cta { position: relative; z-index: 2; margin: 1rem 0 0; }
-.next-show-text { padding: 1.2rem 1.25rem; }
+.next-show-text { padding: var(--space-md); max-width: 46ch; }
 .next-show-link picture, .next-show-link img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.next-show-link h3 { font-family: var(--body); font-weight: 700; color: var(--cream); font-size: 1rem; }
+.next-show-link h3 { font-family: var(--body); font-weight: 700; color: var(--cream);
+  font-size: var(--text-md); line-height: 1.25; }
 
 @media (max-width: 40rem) { .next-show-link { grid-template-columns: 1fr; } }
 
 /* ---- footer: the periwinkle band from the original ---- */
 .site-footer {
-  background: var(--peri); color: var(--cream);
-  margin-top: 4rem; padding: 2.5rem 1.25rem;
+  background: var(--peri-deep); color: var(--cream);
+  margin-top: var(--space-2xl); padding: var(--space-lg) 1.25rem;
 }
 .site-footer-inner {
   max-width: var(--maxw); margin: 0 auto;
   display: flex; flex-wrap: wrap; gap: 1rem 2rem;
   align-items: center; justify-content: space-between;
 }
-.site-footer .display { color: var(--cream); font-size: clamp(1.75rem, 4vw, 2.5rem); margin: 0; line-height: 1; }
+.site-footer .display { color: var(--cream); font-size: var(--text-xl); margin: 0; line-height: 1; }
 .site-footer a { color: var(--cream); }
 .site-footer p { margin: .25rem 0; }
 
@@ -243,34 +275,39 @@ main > section:last-of-type { padding-bottom: 3.5rem; }
    clip-path + a huge box-shadow spread paints the band edge-to-edge without
    affecting layout, so the content stays inside the centred container. */
 main > section:nth-of-type(even) {
+  /* a band separates itself with its background, so it needs less margin */
+  margin-top: var(--space-lg);
   background: var(--ink-deep);
   box-shadow: 0 0 0 100vmax var(--ink-deep);
   clip-path: inset(0 -100vmax);
-  padding-block: 2.75rem;
+  padding-block: var(--space-xl);
 }
 /* Already spans the viewport, so it needs the colour but not the spread. */
 main > section.marquee:nth-of-type(even) { box-shadow: none; clip-path: none; }
 main > section:nth-of-type(even) > h2:first-child { margin-top: 0; }
 
 /* ---- section rhythm ---- */
-main > h1 { margin-bottom: 1.5rem; }
-.next-show > h2 { margin-bottom: 1rem; }
+main > h1 { margin-bottom: var(--space-md); }
 .upcoming, .past { margin-top: 3.5rem; }
-.upcoming > h2, .past > h2 { margin-bottom: 1.5rem; }
-.next-show { position: relative; margin-top: 1.25rem; }
+.upcoming > h2, .past > h2 { margin-bottom: var(--space-md); }
+.next-show { position: relative; margin-top: var(--space-md); }
 
 
 /* ---- announcement bar ---- */
 .announce {
   margin: 0; padding: .7rem 1.25rem;
   background: var(--violet); color: var(--cream);
-  font-size: .92rem; text-align: center;
+  font-size: var(--text-body); text-align: center;
 }
 .announce a { color: var(--cream); }
 
 /* ---- shared section spacing ---- */
-.shows, .mailing, .team, .contact { margin-top: 4.5rem; }
-.shows > h2 { margin-bottom: 1.5rem; }
+/* Rhythm encodes relationship. A full-bleed band separates itself with its
+   background, so it needs less margin above than a plain section following
+   one does. Uniform gaps - the previous 72px everywhere - signal nothing. */
+main > section { margin-top: var(--space-2xl); }
+main > section:first-of-type { margin-top: var(--space-md); }
+.shows > h2 { margin-bottom: var(--space-md); }
 .mt { margin-top: 1rem; }
 
 /* ---- forms ---- */
@@ -278,12 +315,12 @@ main > h1 { margin-bottom: 1.5rem; }
 .form--inline { max-width: 40rem; }
 .field { margin: 0 0 .85rem; }
 .field label {
-  display: block; font-size: .74rem; letter-spacing: .05em;
+  display: block; font-size: var(--text-xs); letter-spacing: .05em;
   text-transform: uppercase; color: var(--muted); margin-bottom: .3rem;
 }
 /* Sized to sit with .team-bio (.92rem) rather than the 1rem default. */
 .field input, .field textarea {
-  width: 100%; font: 400 .92rem/1.5 var(--body);
+  width: 100%; font: 400 var(--text-body)/1.5 var(--body);
   color: var(--cream); background: rgb(249, 240, 251, .06);
   border: 1px solid rgb(128, 117, 255, .38);
   border-radius: .45rem; padding: .55rem .75rem;
@@ -291,10 +328,10 @@ main > h1 { margin-bottom: 1.5rem; }
 /* iOS Safari zooms the viewport when focusing an input under 16px, so hold
    the full size on touch devices where the zoom would actually trigger. */
 @media (pointer: coarse) {
-  .field input, .field textarea { font-size: 1rem; padding: .65rem .8rem; }
+  .field input, .field textarea { font-size: 16px; padding: .65rem .8rem; }
 }
 .field input:focus-visible, .field textarea:focus-visible {
-  outline: 2px solid var(--peri); outline-offset: 1px;
+  outline: 2px solid var(--peri-deep); outline-offset: 1px;
   background: rgb(249, 240, 251, .1);
 }
 .field textarea { resize: vertical; }
@@ -303,15 +340,15 @@ main > h1 { margin-bottom: 1.5rem; }
 @media (max-width: 34rem) { .field-row { grid-template-columns: 1fr; } }
 .field--check { display: flex; align-items: center; gap: .6rem; }
 .field--check input { width: auto; }
-.field--check label { margin: 0; text-transform: none; letter-spacing: normal; font-size: .92rem; color: var(--cream); }
-button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; padding: .75rem 1.6rem; }
-.form-note { color: var(--muted); font-size: .92rem; max-width: 28rem; }
+.field--check label { margin: 0; text-transform: none; letter-spacing: normal; font-size: var(--text-body); color: var(--cream); }
+button.btn { cursor: pointer; font-family: var(--body); font-size: var(--text-body); padding: .75rem 1.6rem; }
+.form-note { color: var(--muted); font-size: var(--text-body); max-width: 28rem; }
 
 /* ---- team ---- */
 /* Always 4-across or 2x2 — never an orphaned 3-up row. */
 .team-list {
   list-style: none; margin: 0; padding: 0;
-  display: grid; gap: 2rem;
+  display: grid; gap: var(--space-xl) var(--space-md);
   grid-template-columns: repeat(4, 1fr);
 }
 
@@ -323,29 +360,33 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: .92rem; paddi
   border-radius: .75rem; margin-bottom: .9rem;
 }
 .team-member h3 {
-  font-family: var(--body); font-weight: 700; font-size: 1rem;
-  color: var(--cream); margin: 0 0 .15rem;
+  font-family: var(--body); font-weight: 700; font-size: var(--text-md);
+  color: var(--cream); margin: 0 0 var(--space-3xs); line-height: 1.25;
 }
 .team-role {
-  margin: 0 0 .6rem; padding-bottom: .6rem;
-  font-size: .85rem; color: var(--peri);
+  margin: 0 0 var(--space-xs); padding-bottom: var(--space-xs);
+  font-size: var(--text-xs); color: var(--peri);
   border-bottom: 1px solid rgb(128, 117, 255, .25);
 }
-.team-bio { margin: 0; font-size: .92rem; color: var(--muted); line-height: 1.55; }
+.team-bio { margin: 0; font-size: var(--text-body); color: var(--muted); line-height: 1.55; }
 
 /* ---- contact ---- */
-.contact-grid { display: grid; gap: 2rem; grid-template-columns: minmax(0, 14.4rem) 1fr; align-items: start; }
+.contact-grid { display: grid; gap: var(--space-lg);
+  grid-template-columns: minmax(26ch, 36ch) 1fr; align-items: start; }
 
 @media (max-width: 44rem) { .contact-grid { grid-template-columns: 1fr; } }
-.contact-intro { margin: 0; color: var(--muted); }
+.contact-intro { margin: 0; color: var(--muted); font-size: var(--text-body); }
 .contact-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; }
 
 /* ---- social icon links ---- */
 .socials { list-style: none; display: flex; align-items: center; gap: 1.34rem; margin: 0; padding: 0; }
-.socials a { display: block; color: var(--violet); transition: color .15s; }
+/* Pad to a 44px hit area, pulled back with negative margin so the header
+   geometry measured against the original site is unchanged. */
+.socials a { display: block; color: var(--violet); transition: color .15s;
+  padding: var(--space-3xs); margin: calc(var(--space-3xs) * -1); }
 .socials svg { width: 2.1875rem; height: 2.1875rem; fill: currentcolor; display: block; }
 .socials a:hover { color: var(--peri); }
-.socials a:focus-visible { outline: 2px solid var(--peri); outline-offset: 3px; border-radius: 4px; }
+.socials a:focus-visible { outline: 2px solid var(--peri-deep); outline-offset: 3px; border-radius: 4px; }
 .site-header .socials a, .site-footer .socials a { color: var(--cream); }
 .site-header .socials a:hover, .site-footer .socials a:hover { color: var(--ink); }
 
@@ -449,7 +490,7 @@ body.landing { overflow-x: clip; }
 }
 .lp-flyer:hover {
   box-shadow:
-    0 0 0 2px var(--peri),
+    0 0 0 2px var(--peri-deep),
     0 10px 28px rgb(0, 0, 0, .62),
     0 28px 70px rgb(0, 0, 0, .7),
     0 0 110px 26px rgb(0, 0, 0, .55);
@@ -458,13 +499,13 @@ body.landing { overflow-x: clip; }
 .lp-cta {
   font-family: var(--body); font-weight: 700;
   font-size: clamp(1rem, 2.4vw, 1.2rem); letter-spacing: .02em;
-  background: var(--peri); color: var(--cream);
-  border: 1px solid var(--peri); border-radius: var(--pill);
+  background: var(--peri-deep); color: var(--cream);
+  border: 1px solid var(--peri-deep); border-radius: var(--pill);
   padding: .95rem 2.6rem; text-decoration: none;
   box-shadow: 0 10px 30px rgb(128, 117, 255, .35);
   transition: background .15s, color .15s, transform .15s;
 }
-.lp-cta:hover { background: var(--cream); color: var(--peri); border-color: var(--cream); transform: translateY(-2px); }
+.lp-cta:hover { background: var(--cream); color: var(--peri-deep); border-color: var(--cream); transform: translateY(-2px); }
 
 .lp-continue, .lp-presented {
   position: absolute; z-index: 3;
@@ -488,7 +529,18 @@ body.landing { overflow-x: clip; }
 
 @media (max-width: 40rem) {
   .lp-flyer img { height: 44svh; }
-  .lp-continue, .lp-presented { font-size: .78rem; }
+  .lp-continue, .lp-presented { font-size: var(--text-xs); }
+
+  /* The source footage is a 2x2 multicam grid. In a portrait viewport
+     object-fit: cover keeps the full source height, so a narrow slice of
+     all four quadrants shows at once, which reads as visual noise.
+     Biasing the crop to the right edge and then scaling 2x from the
+     top-right corner lands a single quadrant across the background. */
+  .lp-video {
+    object-position: 100% 0;
+    transform: scale(2);
+    transform-origin: 100% 0;
+  }
 }
 /* Narrow viewports: the two bottom labels collide side by side, so stack
    them — credit above, continue link below, both left-aligned. */
@@ -502,3 +554,31 @@ body.landing { overflow-x: clip; }
   .lp-video { display: none; }
   .lp { background: var(--ink) url("../video/hero-poster.jpg") center/cover no-repeat; }
 }
+
+/* Reduced-motion still needs the same single-quadrant framing on mobile.
+   This must follow the rule above, whose `background` shorthand would
+   otherwise reset size and position. */
+@media (prefers-reduced-motion: reduce) and (max-width: 40rem) {
+  .lp { background-size: auto 200%; background-position: 100% 0; }
+}
+
+/* ---- next-show card: fields the Facebook ingest can always supply ---- */
+.next-show-actions {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-sm) var(--space-md);
+  position: relative; z-index: 2;          /* above the stretched link */
+  margin: var(--space-md) 0 0;
+}
+.link-quiet {
+  color: var(--muted); text-decoration: none;
+  font-size: var(--text-xs); letter-spacing: .04em;
+  border-bottom: 1px solid rgb(128 117 255 / 35%); padding-bottom: 1px;
+}
+.link-quiet:hover { color: var(--peri); border-bottom-color: var(--peri); }
+.dot { padding: 0 .45em; opacity: .55; }
+.badge {
+  display: inline-block; margin: 0 0 var(--space-2xs);
+  font-size: var(--text-xs); letter-spacing: .09em; text-transform: uppercase;
+  padding: .18rem .6rem; border-radius: var(--pill);
+}
+.badge--warn { background: #ffb020; color: #211a1d; font-weight: 700; }

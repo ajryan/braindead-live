@@ -13,20 +13,36 @@ marquee: true
   <div class="next-show-link">
     {{ calendar.next.cardHtml | safe }}
     <div class="next-show-text">
-      <p class="event-card-date">{{ calendar.next.start | day }}</p>
+      {% if calendar.next.canceled %}<p class="badge badge--warn">Cancelled</p>{% endif %}
+      <p class="event-card-date">
+        <time datetime="{{ calendar.next.start }}">{{ calendar.next.start | day }}</time>
+        <span class="dot">&middot;</span>{{ calendar.next.start | clock }}{% if calendar.next.end %} &ndash; {{ calendar.next.end | clock }}{% endif %}
+      </p>
       {# Stretched link: the whole card is clickable, but the ticket button
          sits above it on its own z-index so it stays separately clickable.
          Avoids nesting <a> inside <a>, which is invalid HTML. #}
       <h3><a class="stretched" href="{{ calendar.next.url | url }}"
              data-umami-event="event-open" data-umami-event-placement="next-show"
              data-umami-event-slug="{{ calendar.next.slug }}">{{ calendar.next.title }}</a></h3>
-      {% if calendar.next.location %}<p class="event-card-where">{{ calendar.next.location }}</p>{% endif %}
-      {% if calendar.next.ticketUrl %}
-      <p class="next-show-cta"><a class="btn" href="{{ calendar.next.ticketUrl }}" rel="noopener"
-     data-umami-event="buy-tickets"
-     data-umami-event-placement="next-show"
-     data-umami-event-slug="{{ calendar.next.slug }}">Buy tickets</a></p>
+      {% if calendar.next.location %}
+      <p class="event-card-where">
+        {{ calendar.next.location }}{% if calendar.next.city %}<span class="dot">&middot;</span>{{ calendar.next.city }}{% endif %}
+      </p>
       {% endif %}
+      <p class="next-show-actions">
+        {% if calendar.next.ticketUrl %}
+        <a class="btn" href="{{ calendar.next.ticketUrl }}" rel="noopener"
+           data-umami-event="buy-tickets"
+           data-umami-event-placement="next-show"
+           data-umami-event-slug="{{ calendar.next.slug }}">Buy tickets</a>
+        {% endif %}
+        <a class="link-quiet" href="{{ calendar.next.icsUrl | url }}"
+           data-umami-event="ics-download" data-umami-event-slug="{{ calendar.next.slug }}">Add to calendar</a>
+        {% if calendar.next.fbUrl %}
+        <a class="link-quiet" href="{{ calendar.next.fbUrl }}" rel="noopener"
+           data-umami-event="event-facebook" data-umami-event-slug="{{ calendar.next.slug }}">Details on Facebook</a>
+        {% endif %}
+      </p>
     </div>
   </div>
 </section>

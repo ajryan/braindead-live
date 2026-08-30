@@ -93,6 +93,24 @@ See `TODO.md` for what's left.
   `document.body.scrollHeight` plus a full-page screenshot before/after.
   A byte-level diff of the HTML tells you nothing about whether the page
   still looks right.
+- **Two periwinkles, and the safe one is the default.** `--peri` (#9d95ff)
+  clears WCAG AA on the ink background at any size, so a plain
+  `color: var(--peri)` can never be a contrast bug. `--peri-deep` (#8075ff)
+  is the saturated brand colour matched to the original Squarespace site and
+  is for **fills, bands, borders, outlines and large display type** — plus
+  text on *light* backgrounds, where the darker value is the safer one.
+  Small text on ink must not use `--peri-deep`: it measures 4.34:1 there,
+  under the 4.5:1 AA threshold. This bit once already, via the global
+  `a { color: ... }` rule, which every link inherited.
+
+- **Type and spacing are tokenised; do not add raw values.** Five type steps
+  (`--text-xs` through `--text-xl`) replaced nineteen ad-hoc font sizes, and
+  an eight-step spacing scale replaced a flat 72px gap between every
+  section. Spacing encodes relationship: a full-bleed band separates itself
+  with its background and takes less margin than a plain section following
+  one. `npm run lint` enforces the CSS side and will flag duplicate
+  selectors, which is how two of these regressions were caught.
+
 - Image files under `images.squarespace-cdn.com/` are frequently
   referenced with `&` in the filename but `%26` or `&amp;` in the HTML
   that links to them — a plain substring search for "is this file

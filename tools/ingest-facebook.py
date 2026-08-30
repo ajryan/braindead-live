@@ -168,6 +168,8 @@ def main():
             continue
         place = obj.get("event_place") or {}
         venue = place.get("contextual_name")
+        city = (((place.get("location") or {}).get("reverse_geocode") or {})
+                .get("city"))
         # the cover image sits on the sibling node, just after the event object
         img = None
         tail = html[end_i:end_i + 1200]
@@ -193,6 +195,8 @@ def main():
         target.setdefault("end", None)            # FB gives no end time; keep any existing
         if venue:
             target["location"] = venue
+        if city:
+            target["city"] = city
         target["canceled"] = bool(obj.get("is_canceled"))
         target.setdefault("body_html", "")
         target.setdefault("ticket", None)

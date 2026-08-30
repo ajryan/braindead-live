@@ -68,6 +68,10 @@ export default async function () {
     url: `/calendar/${e.slug}/`,
     lineup: lineup(e.body_html),
     ticketUrl: (overrides[e.slug] || {}).ticketUrl || ticketUrl(e),
+    // Fields below are ones the Facebook ingest can supply for every future
+    // event, so the card renders consistently rather than degrading.
+    canceled: Boolean(e.canceled),
+    icsUrl: `/calendar/${e.slug}.ics`,
     flyerHtml: await renderImage(e.flyer, { alt: `Flyer for ${e.title}`, sizes: '(max-width: 46rem) 100vw, 46rem', cls: 'flyer' }),
     cardHtml: await renderImage(e.flyer, { sizes: '(max-width: 40rem) 50vw, 15rem' }),
     // Absolute-safe URL for og:image and any non-<picture> use.
