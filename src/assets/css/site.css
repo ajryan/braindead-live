@@ -32,14 +32,15 @@
   --ink: #211a1d;          /* black-bold section background */
   --ink-deep: #1a1316;     /* subtly deeper tone for alternating sections */
   --cream: #f9f0fb;        /* body text on dark */
-  /* Two periwinkles. --peri is the SAFE DEFAULT: it clears WCAG AA on the
-     ink background at any size, so plain `color: var(--peri)` is never a
-     contrast bug. --peri-deep is the saturated brand colour matched to the
-     original site; it is for fills, bands, borders and large display type,
-     and for text on LIGHT backgrounds where the darker value is the safer
-     one. Small text on ink must use --peri (--peri-deep is 4.34:1 there). */
-  --peri: #9d95ff;         /* AA on ink at any size - default for text  */
-  --peri-deep: #8075ff;    /* brand fills, bands, borders, display type */
+  /* One periwinkle, matched to the original site. It clears AA as text on
+     the ink background (4.80:1) provided nothing translucent is stacked
+     underneath - see --card-tint below.
+     --peri-surface is not a second brand colour: it is the same hue darkened
+     purely so CREAM TEXT sitting on a periwinkle fill clears AA. Use it for
+     any periwinkle surface that carries text (header/footer bands, buttons);
+     use --peri for the colour itself. */
+  --peri: #8075ff;         /* brand periwinkle: text on ink, borders, display */
+  --peri-surface: #665ecc;  /* periwinkle fills that carry cream text */
   --violet: #6321ee;       /* deep accent */
   --sage: #cad5ca;         /* site background behind sections */
   --muted: rgb(249, 240, 251, .62);
@@ -89,7 +90,7 @@ h1, h2, h3, .brand, .display {
   font-weight: 400;
   letter-spacing: -.02em;
   line-height: 1.05;
-  color: var(--peri-deep);
+  color: var(--peri);
   margin: 0 0 var(--space-md);
 }
 h1 { font-size: clamp(2rem, 5.5vw, 2.73rem); }
@@ -98,7 +99,7 @@ h3 { font-size: var(--text-md); }
 
 .skip {
   position: absolute; left: -9999px;
-  background: var(--peri-deep); color: var(--cream);
+  background: var(--peri-surface); color: var(--cream);
   padding: .8rem 1.4rem; border-radius: var(--pill);
 }
 .skip:focus { left: 1rem; top: 1rem; z-index: 10; }
@@ -106,70 +107,51 @@ h3 { font-size: var(--text-md); }
 /* ---- header ---- */
 /* Sizing measured off the live site: brand 23.68px / -0.02em, icons 35px,
    ~21.5px apart, both sitting on the same 9px top edge. */
-.site-header { background: var(--peri-deep); padding: .56rem clamp(1.25rem, 4vw, 3.2rem) .62rem; }
+.site-header { background: var(--peri-surface); padding: .56rem clamp(1.25rem, 4vw, 3.2rem) .62rem; }
 .site-header-inner {
   max-width: none;
-  display: flex; flex-wrap: wrap; gap: .75rem 1.5rem;
+  display: flex; flex-wrap: nowrap; gap: .75rem clamp(0.5rem, 3vw, 1.5rem);
   align-items: center; justify-content: space-between;
 }
-.brand { font-size: var(--text-lg); line-height: 1.44; margin: 0; text-decoration: none; color: var(--cream); }
+.brand {
+  /* Fluid so the header stays on one line down to 320px. Clamps to
+     --text-lg (23.68px) from about 515px up, so desktop is unchanged. */
+  font-size: clamp(1.05rem, 4.6vw, 1.48rem);
+  line-height: 1.44; margin: 0; text-decoration: none; color: var(--cream);
+}
 .site-header nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 
 /* ---- marquee: native CSS replacement for the Squarespace context-driven one ---- */
-.marquee {
-  /* full-bleed from inside the centred <main> */
-  margin-inline: calc(50% - 50vw); width: 100vw;
-  margin-block: var(--space-xl) var(--space-2xl);
-  overflow: hidden;
-  padding: .4rem 0 .8rem;
-  user-select: none;
-}
 .marquee-track {
   display: flex; width: max-content;
-  animation: marquee 28s linear infinite;
-}
-.marquee span {
-  text-shadow:
-    0 2px 0 rgb(0, 0, 0, .9),
-    0 5px 10px rgb(0, 0, 0, .85),
-    0 12px 26px rgb(0, 0, 0, .7),
-    0 22px 48px rgb(0, 0, 0, .5);
-  font-family: var(--display);
-  font-size: clamp(3.5rem, 11.5vw, 11.56rem);
-  letter-spacing: -.02em;
-  line-height: 1.1;
-  color: var(--peri-deep);
-  padding-right: .35em;
-  white-space: nowrap;
+  animation: marquee 34s linear infinite;
 }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; transform: none; }
-  .marquee { overflow-x: auto; }
 }
 
 /* ---- buttons ---- */
 .btn {
   display: inline-block;
   font: 400 var(--text-body)/1 var(--body);
-  background: var(--peri-deep); color: var(--cream);
+  background: var(--peri-surface); color: var(--cream);
   padding: 1.2rem 2rem; border-radius: var(--pill);
-  text-decoration: none; border: 1px solid var(--peri-deep);
+  text-decoration: none; border: 1px solid var(--peri-surface);
   transition: background .15s, color .15s;
 }
 .btn:hover { background: transparent; color: var(--peri); }
 .btn--ghost { background: transparent; color: var(--peri); }
 /* True black, outlined — --ink is the page background, so an unbordered
    dark button would have no visible shape against it. */
-.btn--dark { background: #000; color: var(--cream); border-color: var(--peri-deep); }
-.btn--dark:hover { background: var(--peri-deep); color: var(--cream); border-color: var(--peri-deep); }
-.btn--ghost:hover { background: var(--peri-deep); color: var(--cream); }
+.btn--dark { background: #000; color: var(--cream); border-color: var(--peri); }
+.btn--dark:hover { background: var(--peri-surface); color: var(--cream); border-color: var(--peri-surface); }
+.btn--ghost:hover { background: var(--peri-surface); color: var(--cream); }
 
 /* ---- layout ---- */
 main { max-width: var(--maxw); margin: 0 auto; padding: var(--space-sm) 1.25rem 0; }
-main > section:last-of-type { padding-bottom: var(--space-xl); }
 .hero { padding: 2.5rem 0 1rem; text-align: center; }
 .tagline { font-size: var(--text-md); color: var(--muted); margin: 0; }
 .all-shows { text-align: center; margin: 3rem 0 1rem; }
@@ -183,12 +165,12 @@ main > section:last-of-type { padding-bottom: var(--space-xl); }
 .event-card-link {
   display: block; height: 100%;
   text-decoration: none; color: var(--cream);
-  background: rgb(249, 240, 251, .04);
+  background: rgb(249, 240, 251, .02);
   border: 1px solid rgb(128, 117, 255, .28);
   border-radius: .75rem; overflow: hidden;
   transition: border-color .15s, transform .15s;
 }
-.event-card-link:hover { border-color: var(--peri-deep); transform: translateY(-3px); }
+.event-card-link:hover { border-color: var(--peri); transform: translateY(-3px); }
 .event-card-link picture, .event-card-link img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .event-card-text { padding: 1rem 1.1rem 1.2rem; }
 .event-card-date {
@@ -228,7 +210,7 @@ main > section:last-of-type { padding-bottom: var(--space-xl); }
   border: 1px solid rgb(128, 117, 255, .4); border-radius: var(--pill);
   padding: .35rem .9rem; font-size: var(--text-xs);
 }
-.lineup li a:hover { background: var(--peri-deep); color: var(--cream); }
+.lineup li a:hover { background: var(--peri-surface); color: var(--cream); }
 .ics { margin-top: 2.5rem; font-size: var(--text-xs); }
 
 /* ---- next show ---- */
@@ -240,17 +222,17 @@ main > section:last-of-type { padding-bottom: var(--space-xl); }
   display: grid; gap: 1.5rem; align-items: center;
   grid-template-columns: minmax(0, 14.4rem) 1fr;
   color: var(--cream);
-  background: rgb(249, 240, 251, .04);
+  background: rgb(249, 240, 251, .02);
   border: 1px solid rgb(128, 117, 255, .28);
   border-radius: .75rem; overflow: hidden;
 }
-.next-show-link:has(.stretched:hover) { border-color: var(--peri-deep); }
-.next-show-link:has(.stretched:focus-visible) { border-color: var(--peri-deep); }
+.next-show-link:has(.stretched:hover) { border-color: var(--peri); }
+.next-show-link:has(.stretched:focus-visible) { border-color: var(--peri); }
 /* Stretched link covers the card; the CTA sits above it. */
 .next-show-text .stretched { text-decoration: none; color: inherit; }
 .next-show-text .stretched::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .next-show-cta { position: relative; z-index: 2; margin: 1rem 0 0; }
-.next-show-text { padding: var(--space-md); max-width: 46ch; }
+.next-show-text { padding: var(--space-md); max-width: 54ch; }
 .next-show-link picture, .next-show-link img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .next-show-link h3 { font-family: var(--body); font-weight: 700; color: var(--cream);
   font-size: var(--text-md); line-height: 1.25; }
@@ -259,7 +241,7 @@ main > section:last-of-type { padding-bottom: var(--space-xl); }
 
 /* ---- footer: the periwinkle band from the original ---- */
 .site-footer {
-  background: var(--peri-deep); color: var(--cream);
+  background: var(--peri-surface); color: var(--cream);
   margin-top: var(--space-2xl); padding: var(--space-lg) 1.25rem;
 }
 .site-footer-inner {
@@ -274,17 +256,7 @@ main > section:last-of-type { padding-bottom: var(--space-xl); }
 /* ---- alternating section bands ----
    clip-path + a huge box-shadow spread paints the band edge-to-edge without
    affecting layout, so the content stays inside the centred container. */
-main > section:nth-of-type(even) {
-  /* a band separates itself with its background, so it needs less margin */
-  margin-top: var(--space-lg);
-  background: var(--ink-deep);
-  box-shadow: 0 0 0 100vmax var(--ink-deep);
-  clip-path: inset(0 -100vmax);
-  padding-block: var(--space-xl);
-}
-/* Already spans the viewport, so it needs the colour but not the spread. */
-main > section.marquee:nth-of-type(even) { box-shadow: none; clip-path: none; }
-main > section:nth-of-type(even) > h2:first-child { margin-top: 0; }
+main > section > h2:first-child { margin-top: 0; }
 
 /* ---- section rhythm ---- */
 main > h1 { margin-bottom: var(--space-md); }
@@ -305,7 +277,16 @@ main > h1 { margin-bottom: var(--space-md); }
 /* Rhythm encodes relationship. A full-bleed band separates itself with its
    background, so it needs less margin above than a plain section following
    one does. Uniform gaps - the previous 72px everywhere - signal nothing. */
-main > section { margin-top: var(--space-2xl); }
+main > section {
+  /* Every section is the same card: the gutters and the gap between them do
+     the separating, so alternating tones are no longer needed. One padding
+     value and one gap value keep the vertical rhythm even. */
+  margin-top: var(--space-lg);
+  background: var(--ink-deep);
+  border-radius: .75rem;
+  padding: var(--space-lg);
+  position: relative;
+}
 main > section:first-of-type { margin-top: var(--space-md); }
 .shows > h2 { margin-bottom: var(--space-md); }
 .mt { margin-top: 1rem; }
@@ -331,7 +312,7 @@ main > section:first-of-type { margin-top: var(--space-md); }
   .field input, .field textarea { font-size: 16px; padding: .65rem .8rem; }
 }
 .field input:focus-visible, .field textarea:focus-visible {
-  outline: 2px solid var(--peri-deep); outline-offset: 1px;
+  outline: 2px solid var(--peri); outline-offset: 1px;
   background: rgb(249, 240, 251, .1);
 }
 .field textarea { resize: vertical; }
@@ -379,14 +360,24 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: var(--text-bo
 .contact-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; }
 
 /* ---- social icon links ---- */
-.socials { list-style: none; display: flex; align-items: center; gap: 1.34rem; margin: 0; padding: 0; }
+.socials { list-style: none; display: flex; align-items: center;
+  gap: clamp(0.5rem, 2.6vw, 1.34rem); margin: 0; padding: 0; }
 /* Pad to a 44px hit area, pulled back with negative margin so the header
    geometry measured against the original site is unchanged. */
-.socials a { display: block; color: var(--violet); transition: color .15s;
-  padding: var(--space-3xs); margin: calc(var(--space-3xs) * -1); }
-.socials svg { width: 2.1875rem; height: 2.1875rem; fill: currentcolor; display: block; }
+.socials a {
+  display: block; color: var(--violet); transition: color .15s;
+  /* padding grows the hit area; the negative margin keeps the layout box
+     the size of the glyph, so the header still fits on one line */
+  padding: clamp(0.35rem, 1.6vw, 0.28rem);
+  margin: calc(-1 * clamp(0.35rem, 1.6vw, 0.28rem));
+}
+.socials svg {
+  width: clamp(1.25rem, 5.6vw, 2.1875rem);
+  height: clamp(1.25rem, 5.6vw, 2.1875rem);
+  fill: currentcolor; display: block;
+}
 .socials a:hover { color: var(--peri); }
-.socials a:focus-visible { outline: 2px solid var(--peri-deep); outline-offset: 3px; border-radius: 4px; }
+.socials a:focus-visible { outline: 2px solid var(--peri); outline-offset: 3px; border-radius: 4px; }
 .site-header .socials a, .site-footer .socials a { color: var(--cream); }
 .site-header .socials a:hover, .site-footer .socials a:hover { color: var(--ink); }
 
@@ -431,8 +422,11 @@ button.btn { cursor: pointer; font-family: var(--body); font-size: var(--text-bo
   .oozing-logo { animation: none; filter: none; transform: rotate(-2.5deg); }
 }
 
-@media (max-width: 34rem) {
-  .oozing-logo { top: -0.75rem; right: -0.25rem; width: 4.75rem; }
+@media (max-width: 40rem) {
+  /* Cards are full-bleed here, so the logo can no longer hang past the card
+     edge without pushing the document wider than the viewport. */
+  /* right offset absorbs the rotate/scale bounding-box expansion */
+  .oozing-logo { top: -0.5rem; right: var(--space-2xs); width: 4.75rem; }
 }
 
 /* ---- /next/ landing page ------------------------------------------------
@@ -490,7 +484,7 @@ body.landing { overflow-x: clip; }
 }
 .lp-flyer:hover {
   box-shadow:
-    0 0 0 2px var(--peri-deep),
+    0 0 0 2px var(--peri),
     0 10px 28px rgb(0, 0, 0, .62),
     0 28px 70px rgb(0, 0, 0, .7),
     0 0 110px 26px rgb(0, 0, 0, .55);
@@ -499,13 +493,13 @@ body.landing { overflow-x: clip; }
 .lp-cta {
   font-family: var(--body); font-weight: 700;
   font-size: clamp(1rem, 2.4vw, 1.2rem); letter-spacing: .02em;
-  background: var(--peri-deep); color: var(--cream);
-  border: 1px solid var(--peri-deep); border-radius: var(--pill);
+  background: var(--peri-surface); color: var(--cream);
+  border: 1px solid var(--peri-surface); border-radius: var(--pill);
   padding: .95rem 2.6rem; text-decoration: none;
   box-shadow: 0 10px 30px rgb(128, 117, 255, .35);
   transition: background .15s, color .15s, transform .15s;
 }
-.lp-cta:hover { background: var(--cream); color: var(--peri-deep); border-color: var(--cream); transform: translateY(-2px); }
+.lp-cta:hover { background: var(--cream); color: var(--peri); border-color: var(--cream); transform: translateY(-2px); }
 
 .lp-continue, .lp-presented {
   position: absolute; z-index: 3;
@@ -565,7 +559,7 @@ body.landing { overflow-x: clip; }
 /* ---- next-show card: fields the Facebook ingest can always supply ---- */
 .next-show-actions {
   display: flex; flex-wrap: wrap; align-items: center;
-  gap: var(--space-sm) var(--space-md);
+  gap: var(--space-xs) var(--space-sm);
   position: relative; z-index: 2;          /* above the stretched link */
   margin: var(--space-md) 0 0;
 }
@@ -582,3 +576,65 @@ body.landing { overflow-x: clip; }
   padding: .18rem .6rem; border-radius: var(--pill);
 }
 .badge--warn { background: #ffb020; color: #211a1d; font-weight: 700; }
+
+
+/* ---- marquee as a fixed background layer -------------------------------
+   Pinned to the bottom of the viewport and painted beneath every other
+   layer. Because content scrolls over it, any glyph passing under text
+   lightens that text's backdrop, so the glyph alpha is capped: at 5% the
+   worst case (periwinkle small text over a periwinkle glyph) still clears
+   AA. A bottom-weighted mask concentrates what little presence it has in
+   the region content rarely occupies. */
+.marquee--bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+.marquee-row { overflow: hidden; flex: 0 0 auto; }
+/* alternate direction and stagger the timing so the field reads as texture
+   rather than one block sliding past */
+.marquee-row:nth-child(even) .marquee-track { animation-direction: reverse; }
+.marquee-row:nth-child(3n) .marquee-track { animation-duration: 46s; }
+.marquee-row:nth-child(3n + 1) .marquee-track { animation-duration: 55s; }
+
+.marquee--bg span {
+  /* Watermark: the fill carries it, with only a hairline stroke to keep the
+     letterforms legible. A heavy stroke reads as foreground artwork.
+     Self-contained - this no longer inherits from a `.marquee` base rule. */
+  font-family: var(--display);
+  letter-spacing: -.02em;
+  color: rgb(128 117 255 / 7%);
+  -webkit-text-stroke: 0.75px rgb(157 149 255 / 9%);
+  text-shadow: none;
+  font-size: clamp(3.16rem, 8.63vw, 6.9rem);
+  line-height: 1.07;
+  white-space: nowrap;
+  padding-right: .35em;
+}
+/* Everything else is explicitly a layer above it. */
+.site-header, main, .site-footer { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee--bg .marquee-track { animation: none; }
+}
+
+/* ---- mobile: cards go edge to edge ------------------------------------
+   The side gutters are too narrow to be worth spending on a small screen,
+   so the cards take the full width and lose their corner radius. The
+   marquee then reveals only in the gaps between cards. */
+@media (max-width: 40rem) {
+  main { padding-inline: 0; }
+  main > section {
+    border-radius: 0;
+    padding-inline: var(--space-md);
+  }
+}

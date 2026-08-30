@@ -93,15 +93,23 @@ See `TODO.md` for what's left.
   `document.body.scrollHeight` plus a full-page screenshot before/after.
   A byte-level diff of the HTML tells you nothing about whether the page
   still looks right.
-- **Two periwinkles, and the safe one is the default.** `--peri` (#9d95ff)
-  clears WCAG AA on the ink background at any size, so a plain
-  `color: var(--peri)` can never be a contrast bug. `--peri-deep` (#8075ff)
-  is the saturated brand colour matched to the original Squarespace site and
-  is for **fills, bands, borders, outlines and large display type** — plus
-  text on *light* backgrounds, where the darker value is the safer one.
-  Small text on ink must not use `--peri-deep`: it measures 4.34:1 there,
-  under the 4.5:1 AA threshold. This bit once already, via the global
-  `a { color: ... }` rule, which every link inherited.
+- **One periwinkle, plus a darkened surface variant.** `--peri` (#8075ff)
+  is the brand colour matched to the original site, and it clears AA as
+  text on the ink background at 4.80:1. `--peri-surface` (#665ecc) is *not*
+  a second brand colour — it is the same hue darkened purely so **cream
+  text sitting on a periwinkle fill** clears AA. Use it for any periwinkle
+  surface carrying text: the header and footer bands, buttons. Use `--peri`
+  for the colour itself: text on ink, borders, outlines, display type.
+
+- **Translucent overlays silently eat contrast — check the composited
+  backdrop, not the token.** The card fills use
+  `background: rgb(249 240 251 / 2%)`. At the 4% they were originally set
+  to, `--peri` on top measured 4.34:1 rather than 4.80:1, i.e. a 4% white
+  wash cost 0.46 and pushed small text under AA. This was misdiagnosed once
+  as needing a second, lighter "safe" periwinkle; the actual fix was
+  halving the tint. Before adding a colour token to solve a contrast
+  problem, composite the alpha stack and confirm the token is really the
+  cause. Anything below about 3% tint keeps `--peri` above 4.5:1.
 
 - **Type and spacing are tokenised; do not add raw values.** Five type steps
   (`--text-xs` through `--text-xl`) replaced nineteen ad-hoc font sizes, and

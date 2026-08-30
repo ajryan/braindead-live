@@ -35,6 +35,20 @@
 <main id="main">
 {{ content | safe }}
 </main>
+{% if marquee %}
+{# Decorative background field: fixed across the whole viewport, painted
+   beneath every other layer. Rows alternate direction so the texture never
+   reads as one sliding block. aria-hidden + pointer-events:none = inert. #}
+<div class="marquee--bg" aria-hidden="true">
+  {%- for row in range(0, 18) %}
+  <div class="marquee-row">
+    <div class="marquee-track">
+      {%- for i in range(0, 6) %}<span>brain dead live&nbsp;</span>{% endfor %}
+    </div>
+  </div>
+  {%- endfor %}
+</div>
+{% endif %}
 <footer class="site-footer">
   <div class="site-footer-inner">
     <p class="display">{{ site.title }}</p>
