@@ -16,7 +16,11 @@ marquee: true
       {% if calendar.next.canceled %}<p class="badge badge--warn">Cancelled</p>{% endif %}
       <p class="event-card-date">
         <time datetime="{{ calendar.next.start }}">{{ calendar.next.start | day }}</time>
-        <span class="dot">&middot;</span>{{ calendar.next.start | clock }}{% if calendar.next.end %} &ndash; {{ calendar.next.end | clock }}{% endif %}
+        {# Start time only. The Facebook ingest fills a missing end with an
+           end-of-day placeholder, so the range read "5:00 PM - 11:59 PM" on
+           events that never published an end at all. `end` is still carried
+           in the data and used for the .ics export, just not shown here. #}
+        <span class="dot">&middot;</span>{{ calendar.next.start | clock }}
       </p>
       {# Stretched link: the whole card is clickable, but the ticket button
          sits above it on its own z-index so it stays separately clickable.
