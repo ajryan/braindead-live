@@ -78,9 +78,31 @@ Read `AGENTS.md` before touching anything.
       hue cycle, pinned top-right of the Next Show section. Written from
       scratch; the original logo is a static PNG with no animation.
       Fully disabled under `prefers-reduced-motion`.
-- [x] Landing page background video: 36.7 MB / 7m20s source cut to a 24s
-      loop, encoded at native 640x360 CRF 20 (**3.07 MB**), with contrast
-      and saturation reduced and the black point lifted, baked in via
+- [x] Landing page background video, re-cut from the 1080p multicam
+      master (`tools/encode-hero.sh`, which records the window, framing and
+      grade so none of it has to be reverse-engineered again). Three encodes
+      chosen by `<source media>`: **hero-1080** 1920x1080 (2.57 MB, wide
+      screens), **hero-720** 1280x720 (2.01 MB, default), **hero-portrait**
+      608x1080 (1.94 MB, portrait). One file downloads per visitor.
+
+      The earlier clip came off a YouTube 360p rip that was itself a 2x2
+      multicam grid, so each angle was only 320x180 and portrait screens
+      showed an 83x180 sliver blown up ~14x — that was the pixellation,
+      not the encode, which already ran at 2x the source bitrate.
+
+      All three come from one window (204s, 9.8s): the close keyboard shot,
+      the only cut-free take of ~10s where the player reads clearly. They
+      sit left of centre, so the flyer occupies mid-frame without covering
+      them. Portrait crops at x=540 rather than the geometric centre —
+      centring lands on bare keyboard, while x=540 keeps both hands on the
+      keys in the lower band, which is the part still visible once the
+      `orientation: portrait` rule pulls the flyer up.
+
+      Grade: black point lifted, contrast and saturation reduced, and the
+      **highlights rolled off** (full white lands at 0.80, not 0.96) because
+      stage key lights blew out the player's pale jacket and the white keys
+      hard enough to pull attention off the flyer. Shadows and midtones
+      still follow the line measured off the previous clip. All baked in via
       ffmpeg so there is no runtime filter cost.
 - [x] `pathPrefix` support so the site works both at a domain root and on
       a GitHub Pages project URL. Set `PATH_PREFIX` at build time.
@@ -199,6 +221,21 @@ Read `AGENTS.md` before touching anything.
   in the mirror because Squarespace's `video-background.js` never loaded.
   That hero was removed by design, and the landing page does the same job
   better with a self-hosted, graded clip and no third-party player.
+
+  A YouTube embed was reconsidered for the landing backdrop and rejected:
+  the player ships roughly a megabyte of JavaScript before it decodes a
+  frame, it sizes its quality to the element so a full-bleed background
+  pulls *more* video than the self-hosted file, `loop` re-seeks visibly on
+  a 10s clip, an ad blocker leaves a black rectangle with no poster, and
+  iOS muted autoplay in an iframe is unreliable.
+
+- **The multicam master is not in the repo** (391 MB). `tools/encode-hero.sh`
+  defaults to `~/Downloads`; pass a path or set `HERO_SRC`. It alternates
+  between full-frame single-camera shots (0-236s) and composited multi-up
+  grids (2-up from ~240s, 2x2 later), and the edit cuts roughly every 8s.
+  Only the full-frame region is usable. Detect cuts at scene threshold
+  **0.08**, not 0.20 — 0.20 silently merges genuinely different shots
+  (it reported 169.47-191.19 as one 21.7s take when it is three).
 
 - **Event titles run long.** One is 144 characters. Browsers show them
   fine; search results truncate around 60. Shortening real show names

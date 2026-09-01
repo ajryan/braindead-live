@@ -449,6 +449,10 @@ body.landing { overflow-x: clip; }
   width: 100%; height: 100%;
   object-fit: cover;
   z-index: 0;
+  /* Stands in for the `poster` attribute, which can only name one file.
+     Portrait screens need a differently framed still, so the poster is a
+     background that the first decoded frame paints over. */
+  background: center/cover no-repeat url("../video/hero-poster.jpg");
 }
 .lp-scrim {
   position: absolute; inset: 0; z-index: 1;
@@ -524,17 +528,6 @@ body.landing { overflow-x: clip; }
 @media (max-width: 40rem) {
   .lp-flyer img { height: 44svh; }
   .lp-continue, .lp-presented { font-size: var(--text-xs); }
-
-  /* The source footage is a 2x2 multicam grid. In a portrait viewport
-     object-fit: cover keeps the full source height, so a narrow slice of
-     all four quadrants shows at once, which reads as visual noise.
-     Biasing the crop to the right edge and then scaling 2x from the
-     top-right corner lands a single quadrant across the background. */
-  .lp-video {
-    object-position: 100% 0;
-    transform: scale(2);
-    transform-origin: 100% 0;
-  }
 }
 /* Narrow viewports: the two bottom labels collide side by side, so stack
    them — credit above, continue link below, both left-aligned. */
@@ -544,16 +537,39 @@ body.landing { overflow-x: clip; }
   .lp-continue { bottom: 1.1rem; }
 }
 
+/* Landscape runs the flyer 25% larger than the portrait sizing: there is
+   horizontal room for it, and the footage reads around it rather than being
+   hidden behind it. Capped against the viewport so the CTA and the corner
+   labels always have room — on a short landscape window (a phone on its
+   side, a half-height browser) the cap binds before the percentage does. */
+@media (orientation: landscape) {
+  .lp-flyer img { height: min(62.5svh, calc(100svh - 13rem)); }
+}
+
+/* Portrait screens get the portrait encode, so they need the matching
+   still. Keyed on orientation, not width, to match the <source media> on
+   the video element. */
+@media (orientation: portrait) {
+  .lp-video { background-image: url("../video/hero-poster-portrait.jpg"); }
+
+  /* A portrait viewport is too narrow to leave usable video either side of
+     the flyer, so the footage only reads above and below it. The portrait
+     encode is cut to suit that: dark in its upper half, performers in the
+     lower band. Pull the content block up out of that band - centred, the
+     flyer lands squarely on the players. `.lp` is `place-items: center`;
+     overriding align-items keeps the horizontal centring. */
+  .lp { align-items: start; padding-top: clamp(1.25rem, 4svh, 2.5rem); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lp-video { display: none; }
   .lp { background: var(--ink) url("../video/hero-poster.jpg") center/cover no-repeat; }
 }
 
-/* Reduced-motion still needs the same single-quadrant framing on mobile.
-   This must follow the rule above, whose `background` shorthand would
-   otherwise reset size and position. */
-@media (prefers-reduced-motion: reduce) and (max-width: 40rem) {
-  .lp { background-size: auto 200%; background-position: 100% 0; }
+/* Must follow the rule above, whose `background` shorthand would otherwise
+   reset the image back to the landscape still. */
+@media (prefers-reduced-motion: reduce) and (orientation: portrait) {
+  .lp { background-image: url("../video/hero-poster-portrait.jpg"); }
 }
 
 /* ---- next-show card: fields the Facebook ingest can always supply ---- */

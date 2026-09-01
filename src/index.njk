@@ -26,9 +26,18 @@ eleventyExcludeFromCollections: true
 </head>
 <body class="landing">
 <main class="lp">
+  {#- Portrait first: it is the only source with its own framing, so it must
+      win before the width-based tiers get a chance to match. Browsers pick
+      the first <source> whose media query matches and do not re-evaluate on
+      resize or rotation, which is fine here - the loaded clip keeps playing.
+      The poster is a CSS background on .lp-video, not an attribute, so it
+      can differ per orientation. -#}
   <video class="lp-video" autoplay muted loop playsinline
-         poster="{{ "/assets/video/hero-poster.jpg" | url }}" src="{{ "/assets/video/hero.mp4" | url }}"
-         aria-hidden="true" tabindex="-1"></video>
+         aria-hidden="true" tabindex="-1">
+    <source media="(orientation: portrait)" src="{{ "/assets/video/hero-portrait.mp4" | url }}" type="video/mp4">
+    <source media="(min-width: 1400px)" src="{{ "/assets/video/hero-1080.mp4" | url }}" type="video/mp4">
+    <source src="{{ "/assets/video/hero-720.mp4" | url }}" type="video/mp4">
+  </video>
   <div class="lp-scrim" aria-hidden="true"></div>
 
   <div class="lp-content">
