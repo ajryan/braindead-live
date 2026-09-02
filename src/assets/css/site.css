@@ -129,10 +129,6 @@ h3 { font-size: var(--text-md); }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; transform: none; }
-}
-
 /* ---- buttons ---- */
 .btn {
   display: inline-block;
@@ -627,10 +623,6 @@ body.landing { overflow-x: clip; }
 }
 /* Everything else is explicitly a layer above it. */
 .site-header, main, .site-footer { position: relative; z-index: 1; }
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee--bg .marquee-track { animation: none; }
-}
 
 /* ---- mobile: cards go edge to edge ------------------------------------
    The side gutters are too narrow to be worth spending on a small screen,
