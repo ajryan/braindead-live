@@ -612,7 +612,7 @@ body.landing { overflow-x: clip; }
      letterforms legible. A heavy stroke reads as foreground artwork.
      Self-contained - this no longer inherits from a `.marquee` base rule. */
   font-family: var(--display);
-  letter-spacing: -.02em;
+  letter-spacing: 0;
   color: rgb(128 117 255 / 7%);
   -webkit-text-stroke: 0.75px rgb(157 149 255 / 9%);
   text-shadow: none;
