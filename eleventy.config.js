@@ -2,10 +2,6 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-// GitHub Pages project sites serve from /<repo>/, so every root-absolute
-// URL needs prefixing. Set PATH_PREFIX in CI; empty for a custom domain.
-const PATH_PREFIX = process.env.PATH_PREFIX || '';
-
 // Cache-bust by content hash, not by build time: the URL changes only when
 // the file's bytes change, so unchanged assets keep their cached copy.
 const hashes = new Map();
@@ -64,7 +60,7 @@ export default function (eleventyConfig) {
   });
 
   return {
-    pathPrefix: PATH_PREFIX ? `${PATH_PREFIX}/` : '/',
+    pathPrefix: '/',
     dir: { input: 'src', output: '_site', includes: '_includes', data: '_data' },
     markdownTemplateEngine: 'njk',
     htmlTemplateEngine: 'njk',

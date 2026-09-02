@@ -67,33 +67,17 @@ jobs:
           key: eleventy-img-${{ hashFiles('content/flyers/**', 'content/team/**') }}
           restore-keys: eleventy-img-
 
-      - name: Resolve base URL
-        id: base
-        run: |
-          # Set repo variable CUSTOM_DOMAIN (e.g. braindead.live) to deploy at
-          # a domain root. Without it, build for the project-page subpath.
-          if [ -n "${{ vars.CUSTOM_DOMAIN }}" ]; then
-            echo "path_prefix=" >> "$GITHUB_OUTPUT"
-            echo "Deploying to custom domain: ${{ vars.CUSTOM_DOMAIN }}"
-          else
-            echo "path_prefix=/${GITHUB_REPOSITORY#*/}" >> "$GITHUB_OUTPUT"
-            echo "Deploying to project page: /${GITHUB_REPOSITORY#*/}"
-          fi
-
       - name: Lint CSS
         run: npm run lint:css
 
       - name: Build
-        env:
-          PATH_PREFIX: ${{ steps.base.outputs.path_prefix }}
         run: npm run build
 
       - name: Lint built HTML
         run: npm run lint:html
 
       - name: Write CNAME
-        if: vars.CUSTOM_DOMAIN != ''
-        run: echo "${{ vars.CUSTOM_DOMAIN }}" > _site/CNAME
+        run: echo "braindead.live" > _site/CNAME
 
       - name: Disable Jekyll
         # Pages ignores files starting with "_" unless this exists.
