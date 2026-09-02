@@ -561,17 +561,6 @@ body.landing { overflow-x: clip; }
   .lp { align-items: start; padding-top: clamp(1.25rem, 4svh, 2.5rem); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .lp-video { display: none; }
-  .lp { background: var(--ink) url("../video/hero-poster.jpg") center/cover no-repeat; }
-}
-
-/* Must follow the rule above, whose `background` shorthand would otherwise
-   reset the image back to the landscape still. */
-@media (prefers-reduced-motion: reduce) and (orientation: portrait) {
-  .lp { background-image: url("../video/hero-poster-portrait.jpg"); }
-}
-
 /* ---- next-show card: fields the Facebook ingest can always supply ---- */
 .next-show-actions {
   display: flex; flex-wrap: wrap; align-items: center;
