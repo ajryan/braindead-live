@@ -790,5 +790,21 @@
     "fbUrl": "https://www.facebook.com/events/1756279065377266/",
     "canceled": false,
     "city": "Frederick"
+  },
+  {
+    "slug": "channel-zero-goth-dj-nite",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "1116418770949534",
+    "fbUrl": "https://www.facebook.com/events/1116418770949534/",
+    "title": "Channel Zero • Goth DJ Nite",
+    "start": "2026-10-10T20:00:00-0400",
+    "end": null,
+    "location": "Frederick, MD, United States, Maryland 21701",
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/channel-zero-goth-dj-nite.jpg"
   }
 ]
