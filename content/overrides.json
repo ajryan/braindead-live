@@ -2,5 +2,8 @@
   "_comment": "Per-event corrections merged over extracted data in src/_data/calendar.js. Keyed by slug. Survives re-running tools/extract-events.py.",
   "infinity-tribe-nester-seven-teller": {
     "ticketUrl": "https://buytickets.at/braindeadlive/2365234"
+  },
+  "channel-zero-goth-dj-nite": {
+    "location": "Sandbox Brewhouse, 880 N East St, Frederick, MD"
   }
 }

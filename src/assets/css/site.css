@@ -639,21 +639,46 @@ body.landing { overflow-x: clip; }
 }
 
 /* ---- /thanks/ : where Square returns a buyer after checkout ---------- */
-.thanks { text-align: center; }
+.thanks { text-align: center; position: relative; isolation: isolate; overflow: hidden; }
 .thanks h1 { margin-top: 0; }
+/* The texture is what gives the shirt's glass something to frost: a halftone
+   screen fading out toward the bottom, under two soft colour pools (brand
+   periwinkle and raspberry). Kept dim on purpose — the heading and pickup
+   copy sit directly on it. Purely decorative, hence a pseudo-element. */
+.thanks::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38rem 24rem at 18% 22%, rgb(128 117 255 / 32%), transparent 70%),
+    radial-gradient(34rem 26rem at 86% 62%, rgb(178 29 93 / 34%), transparent 70%),
+    radial-gradient(rgb(249 240 251 / 20%) 1.2px, transparent 1.7px) 0 0 / 14px 14px,
+    repeating-linear-gradient(115deg, rgb(249 240 251 / 5%) 0 1px, transparent 1px 22px);
+  mask-image: linear-gradient(to bottom, #000 35%, rgb(0 0 0 / 45%));
+}
+/* Same glass card as the landing page's shirt (.lp-shirt): hairline ring,
+   halo, frosted backdrop. The padding is the glass showing around the cutout. */
 .thanks-shirt {
   display: inline-block; line-height: 0; overflow: hidden;
   margin: var(--space-md) 0;
-  border-radius: .75rem;
-  box-shadow: 0 0 0 1px rgb(249, 240, 251, .14), 0 10px 28px rgb(0, 0, 0, .5);
-  /* Deliberately a flat fill, not the glass the landing page uses: the shirt
-     art is transparent and this page has no footage behind it, only a dark
-     --ink-deep card. Frosting that would just blur one flat colour and leave
-     a near-black shirt on a near-black panel. */
-  background: #fff;
+  padding: clamp(.75rem, 3vw, 1.5rem);
+  border-radius: .6rem;
+  background: rgb(5, 5, 2, .35);
+  box-shadow:
+    0 0 0 1px rgb(249, 240, 251, .22),
+    0 10px 28px rgb(0, 0, 0, .55),
+    0 28px 70px rgb(0, 0, 0, .5);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .thanks-shirt {
+    background: rgb(249 240 251 / 5%);
+    backdrop-filter: blur(10px) saturate(115%) brightness(0.95);
+  }
 }
 .thanks-shirt picture, .thanks-shirt img { margin: 0; display: block; }
-.thanks-shirt img { width: min(80vw, 21rem); }
+.thanks-shirt img {
+  width: min(70vw, 19rem);
+  filter: drop-shadow(0 3px 9px rgb(0, 0, 0, .55));
+}
 /* The pickup details are the point of the page, so they carry card-title
    size rather than body size. */
 .thanks-pickup {

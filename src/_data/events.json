@@ -806,5 +806,19 @@
     "body_html": "",
     "ticket": null,
     "flyer": "content/flyers/channel-zero-goth-dj-nite.jpg"
+  },
+  {
+    "slug": "sunday-scaries",
+    "source": {
+      "adapter": "manual"
+    },
+    "title": "Sunday Scaries: Record Pop-Up w/ Live EDM",
+    "start": "2026-10-11T14:00:00-0400",
+    "end": "2026-10-11T19:00:00-0400",
+    "location": "Sandbox Brewhouse, 880 N East St, Frederick, MD",
+    "canceled": false,
+    "body_html": "<p>Record pop-up with live EDM. 2PM\u20137PM, all ages, free entry.</p><p>JJARO, Austin Litz, KOKOP3LLI, BROOCE, ZZINGG. Stream it on youtube.com/@zzinggfx</p>",
+    "ticket": null,
+    "flyer": "content/flyers/sunday-scaries.jpeg"
   }
 ]
