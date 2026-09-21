@@ -6,6 +6,7 @@
 <title>{% if title %}{{ title }} &mdash; {% endif %}{{ site.title }}</title>
 <meta name="description" content="{{ description or site.description }}">
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+{% if noindex %}<meta name="robots" content="noindex">{% endif %}
 <meta property="og:site_name" content="{{ site.title }}">
 <meta property="og:title" content="{{ title or site.title }}">
 <meta property="og:description" content="{{ description or site.description }}">

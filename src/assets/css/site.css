@@ -43,6 +43,14 @@
   --peri-surface: #665ecc;  /* periwinkle fills that carry cream text */
   --violet: #6321ee;       /* deep accent */
   --sage: #cad5ca;         /* site background behind sections */
+  /* Raspberry for the merch button, 90 degrees of hue off --peri-surface so
+     the two buttons never read as the same action. Unlike --peri-surface,
+     this one does NOT derive from a colour already in the palette — it is a
+     genuinely new hue, picked to sit on the pink side of the purple's
+     triad, so treat it as a fourth colour. Same darkening rule though: the
+     lightness is set by CREAM TEXT clearing AA at 5.87:1, not by taste. A
+     brighter, properly pink pink fails cream and needs ink text instead. */
+  --rose-surface: #b21d5d; /* raspberry fills that carry cream text */
   --muted: rgb(249, 240, 251, .62);
   /* Type scale: five steps, replacing nineteen ad-hoc values. Every step
      is perceptible - the smallest is 1.15x. --text-lg and --text-xl are
@@ -436,7 +444,9 @@ body.landing { overflow-x: clip; }
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: clamp(1rem, 4vh, 2.5rem) 1.25rem clamp(4.5rem, 12vh, 6rem);
+  /* Bottom padding only has to clear the absolutely-positioned corner
+     labels (their offset plus one line, ~2.1rem); the rest was air. */
+  padding: clamp(.6rem, 2.5vh, 1.5rem) 1.25rem clamp(3.25rem, 8vh, 4.25rem);
   overflow: hidden;
   max-width: none;
 }
@@ -459,13 +469,21 @@ body.landing { overflow-x: clip; }
     linear-gradient(to bottom, rgb(10, 6, 9, .28), rgb(10, 6, 9, .06) 38%, rgb(10, 6, 9, .06) 62%, rgb(10, 6, 9, .5));
 }
 
+/* Two sellable things, two columns: flyer over "Buy Tickets", shirt over
+   "Buy Show Tee". Stacked by default so a phone reads flyer-then-shirt; the
+   side-by-side row is opted into at 52rem, below. */
 .lp-content {
   position: relative; z-index: 2;
   display: flex; flex-direction: column; align-items: center;
   gap: clamp(1.1rem, 3vh, 2rem);
 }
-/* Flyer occupies ~50% of the viewport. */
-.lp-flyer {
+.lp-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(.65rem, 1.6vh, .95rem);
+}
+/* One card, both columns: a clipped rounded box with a hairline ring and a
+   halo lifting it off the footage. */
+.lp-flyer, .lp-shirt {
   display: block; line-height: 0; border-radius: .6rem; overflow: hidden;
   box-shadow:
     0 0 0 1px rgb(249, 240, 251, .22),
@@ -473,14 +491,36 @@ body.landing { overflow-x: clip; }
     0 28px 70px rgb(0, 0, 0, .7),
     0 0 110px 26px rgb(0, 0, 0, .55);   /* halo separating it from the footage */
 }
+/* The flyer is an opaque poster and fills its card by itself. The shirt is a
+   cutout with a real alpha channel, so its card needs a surface of its own —
+   here, untinted glass: a blurred and slightly lifted crop of the footage. */
+.lp-shirt { background: rgb(5, 5, 2, .5); }
+
+@supports (backdrop-filter: blur(1px)) {
+  .lp-shirt {
+    background: none;
+    backdrop-filter: blur(2px) saturate(85%) brightness(0.9);
+  }
+}
+/* Keeps a near-black garment off a near-black panel. Deliberately small:
+   the card clips with `overflow: hidden`, so a wide shadow would be cut
+   square at the card edge and read as a seam. */
+.lp-shirt img { filter: drop-shadow(0 3px 9px rgb(0, 0, 0, .55)); }
 /* The shared .flyer class carries a block margin for event pages; reset it
    here or the container sits taller than the image and the video shows
    through above and below it. */
-.lp-flyer picture, .lp-flyer img { margin: 0; border-radius: 0; display: block; }
-.lp-flyer img {
-  height: 50vh; height: 50svh;
-  width: auto; max-width: min(88vw, 46rem);
+.lp-flyer picture, .lp-flyer img,
+.lp-shirt picture, .lp-shirt img { margin: 0; border-radius: 0; display: block; }
+/* Sized by height, not width, so the two columns bottom out together and
+   their buttons line up. They also come out equally wide, but only because
+   the shirt photo was cropped to the flyer's 4:5 — a source photo at some
+   other aspect will silently render narrower or wider here. Crop the file to
+   match; do not add a per-image width, which would break the button line. */
+.lp-flyer img, .lp-shirt img {
+  width: auto;
   object-fit: contain;
+  height: 33.5vh; height: max(12rem, 33.5svh);
+  max-width: min(70vw, 24rem);
 }
 .lp-flyer:hover {
   box-shadow:
@@ -489,7 +529,6 @@ body.landing { overflow-x: clip; }
     0 28px 70px rgb(0, 0, 0, .7),
     0 0 110px 26px rgb(0, 0, 0, .55);
 }
-
 .lp-cta {
   font-family: var(--body); font-weight: 700;
   font-size: clamp(1rem, 2.4vw, 1.2rem); letter-spacing: .02em;
@@ -498,8 +537,29 @@ body.landing { overflow-x: clip; }
   padding: .95rem 2.6rem; text-decoration: none;
   box-shadow: 0 10px 30px rgb(128, 117, 255, .35);
   transition: background .15s, color .15s, transform .15s;
+  /* Above the cards' halos. The button already came after its card in source
+     order, which used to be enough — but `backdrop-filter` on .lp-shirt
+     creates a stacking context, promoting that card above the later sibling
+     and dropping its 110px halo onto the button underneath. Measured: the
+     button region sits at 52.9 mean brightness without this, 76.6 with it,
+     and removing the backdrop-filter instead gives 76.9, which is what
+     pins the cause on the glass rather than on the shadow.
+     So this z-index is a dependency of the glass, not decoration — if the
+     shirt card ever stops being frosted, it can go. */
+  position: relative; z-index: 1;
 }
 .lp-cta:hover { background: var(--cream); color: var(--peri); border-color: var(--cream); transform: translateY(-2px); }
+
+/* The merch button takes the raspberry surface, 90 degrees of hue off the
+   periwinkle ticket button, so the two never read as the same action.
+   --violet was tried first and sat only 15 degrees off --peri-surface;
+   Square's own green went the other way, foreign to the palette and only
+   4.54:1 under cream. This clears both at 5.87:1. */
+.lp-cta--merch {
+  background: var(--rose-surface); border-color: var(--rose-surface);
+  box-shadow: 0 10px 30px rgb(178, 29, 93, .38);
+}
+.lp-cta--merch:hover { background: var(--cream); color: var(--rose-surface); border-color: var(--cream); }
 
 .lp-continue, .lp-presented {
   position: absolute; z-index: 3;
@@ -521,25 +581,46 @@ body.landing { overflow-x: clip; }
 .lp-ig svg { fill: currentcolor; display: block; }
 .lp-ig:hover { opacity: 1; }
 
-@media (max-width: 40rem) {
-  .lp-flyer img { height: 44svh; }
-  .lp-continue, .lp-presented { font-size: var(--text-xs); }
-}
-/* Narrow viewports: the two bottom labels collide side by side, so stack
-   them — credit above, continue link below, both left-aligned. */
-@media (max-width: 34rem) {
-  .lp { padding-bottom: 5.5rem; }
-  .lp-presented { right: auto; left: clamp(1rem, 3vw, 1.75rem); bottom: 2.6rem; }
-  .lp-continue { bottom: 1.1rem; }
+/* Stacked: flyer, then shirt, which is taller than one viewport on a phone.
+   The corner labels can no longer hang off the bottom of the section — that
+   is now below the fold — so they rejoin the flow underneath the content,
+   and the rows pack to the top instead of being spread by grid stretch. */
+@media (max-width: 51.99rem) {
+  .lp {
+    align-content: start;
+    row-gap: var(--space-sm);
+    padding-bottom: clamp(1rem, 3vh, 1.75rem);
+  }
+  .lp-continue, .lp-presented { position: static; }
+  .lp-presented { justify-content: center; }
 }
 
-/* Landscape runs the flyer 25% larger than the portrait sizing: there is
-   horizontal room for it, and the footage reads around it rather than being
-   hidden behind it. Capped against the viewport so the CTA and the corner
-   labels always have room — on a short landscape window (a phone on its
+@media (max-width: 40rem) {
+  .lp-continue, .lp-presented { font-size: var(--text-xs); }
+}
+
+/* Side by side. Both columns run taller here than when stacked — there is
+   horizontal room, and the footage reads around them rather than being
+   hidden behind them. Each is capped against the viewport so its button and
+   the corner labels always have room; on a short window (a phone on its
    side, a half-height browser) the cap binds before the percentage does. */
-@media (orientation: landscape) {
-  .lp-flyer img { height: min(62.5svh, calc(100svh - 13rem)); }
+@media (min-width: 52rem) {
+  .lp-content {
+    flex-direction: row;
+    align-items: flex-start; justify-content: center;
+    gap: clamp(1rem, 2.5vw, 2.25rem);
+  }
+  /* Exactly 0.8x the sizing this carried before, cap included — the cap is
+     scaled as min(.8*52svh, .8*(100svh - 12rem)) so short windows shrink by
+     the same fifth rather than being clipped by an unscaled reserve.
+     The 15rem floor is why this is a clamp and not a min: on a short
+     landscape window the reserve eats most of the height, and without a
+     floor the picture ends up narrower than the button underneath it. A
+     floor degrades continuously, where a max-height breakpoint would snap. */
+  .lp-flyer img, .lp-shirt img {
+    height: 41.6vh; height: clamp(15rem, 41.6svh, calc(80svh - 9.6rem));
+    max-width: min(37vw, 27rem);
+  }
 }
 
 /* Portrait screens get the portrait encode, so they need the matching
@@ -554,7 +635,30 @@ body.landing { overflow-x: clip; }
      lower band. Pull the content block up out of that band - centred, the
      flyer lands squarely on the players. `.lp` is `place-items: center`;
      overriding align-items keeps the horizontal centring. */
-  .lp { align-items: start; padding-top: clamp(1.25rem, 4svh, 2.5rem); }
+  .lp { align-items: start; padding-top: clamp(.75rem, 2.5svh, 1.5rem); }
+}
+
+/* ---- /thanks/ : where Square returns a buyer after checkout ---------- */
+.thanks { text-align: center; }
+.thanks h1 { margin-top: 0; }
+.thanks-shirt {
+  display: inline-block; line-height: 0; overflow: hidden;
+  margin: var(--space-md) 0;
+  border-radius: .75rem;
+  box-shadow: 0 0 0 1px rgb(249, 240, 251, .14), 0 10px 28px rgb(0, 0, 0, .5);
+  /* Deliberately a flat fill, not the glass the landing page uses: the shirt
+     art is transparent and this page has no footage behind it, only a dark
+     --ink-deep card. Frosting that would just blur one flat colour and leave
+     a near-black shirt on a near-black panel. */
+  background: #fff;
+}
+.thanks-shirt picture, .thanks-shirt img { margin: 0; display: block; }
+.thanks-shirt img { width: min(80vw, 21rem); }
+/* The pickup details are the point of the page, so they carry card-title
+   size rather than body size. */
+.thanks-pickup {
+  max-width: 34rem; margin-inline: auto;
+  font-size: var(--text-md); line-height: 1.45;
 }
 
 /* ---- next-show card: fields the Facebook ingest can always supply ---- */

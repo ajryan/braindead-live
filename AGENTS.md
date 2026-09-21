@@ -16,6 +16,9 @@ Top-level layout (post-rebuild):
   `tools/extract-events.py`. Do not hand-edit; regenerate it.
 - `content/flyers/` — canonical flyer images, one per event. Populated by
   ingest; consumed by the build's image pipeline.
+- `content/merch/` — product photos for whatever is currently on sale.
+  Configured by hand in `src/_data/merch.js` (Square hosted-checkout link,
+  pickup copy), not by ingest.
 - `_site/` — build output (gitignored). `npm run build` / `npm run serve`.
 - `reference/` — the original wget mirror, kept as the visual source of
   truth for the redesign. Everything below describes *that* directory.

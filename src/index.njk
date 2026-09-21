@@ -40,18 +40,34 @@ eleventyExcludeFromCollections: true
   </video>
   <div class="lp-scrim" aria-hidden="true"></div>
 
+  {#- Two columns, each an image over the button that buys it, so the two
+      CTAs can never drift apart from what they sell. Side by side once
+      there is width for both; stacked flyer-then-shirt below that. -#}
   <div class="lp-content">
-    <a class="lp-flyer" href="{{ calendar.next.url | url }}"
-       data-umami-event="event-open" data-umami-event-placement="landing-flyer"
-       data-umami-event-slug="{{ calendar.next.slug }}">
-      {{ calendar.next.flyerHtml | safe }}
-    </a>
-    {% if calendar.next.ticketUrl %}
-    <a class="lp-cta" href="{{ calendar.next.ticketUrl }}" rel="noopener"
-       data-umami-event="buy-tickets"
-       data-umami-event-placement="landing"
-       data-umami-event-slug="{{ calendar.next.slug }}">Buy Tickets</a>
-    {% endif %}
+    <div class="lp-item">
+      <a class="lp-flyer" href="{{ calendar.next.url | url }}"
+         data-umami-event="event-open" data-umami-event-placement="landing-flyer"
+         data-umami-event-slug="{{ calendar.next.slug }}">
+        {{ calendar.next.flyerHtml | safe }}
+      </a>
+      {% if calendar.next.ticketUrl %}
+      <a class="lp-cta" href="{{ calendar.next.ticketUrl }}" rel="noopener"
+         data-umami-event="buy-tickets"
+         data-umami-event-placement="landing"
+         data-umami-event-slug="{{ calendar.next.slug }}">Buy Tickets</a>
+      {% endif %}
+    </div>
+    <div class="lp-item">
+      <div class="lp-shirt">{{ merch.shirt.html | safe }}</div>
+      {# Square hosted checkout. The vendor embed ships a white card, a green
+         button and a Google Fonts <link>; only the link is kept, so the page
+         stays on-brand and makes no third-party font request. #}
+      <a class="lp-cta lp-cta--merch" href="{{ merch.shirt.buyUrl }}"
+         target="_blank" rel="noopener"
+         data-umami-event="buy-merch"
+         data-umami-event-placement="landing"
+         data-umami-event-item="shirt">Buy Show Tee</a>
+    </div>
   </div>
 
   <a class="lp-continue" href="{{ "/home.html" | url }}" data-umami-event="landing-continue">continue &rarr;</a>

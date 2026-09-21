@@ -1,0 +1,13 @@
+---
+layout: layouts/base.njk
+permalink: /thanks/index.html
+title: Thank you
+description: Your show shirt is ready for pickup at the Carroll Creek Stage ticket booth.
+noindex: true
+---
+<section class="thanks">
+  <h1>Thank you for your purchase!</h1>
+  <div class="thanks-shirt">{{ merch.shirt.html | safe }}</div>
+  <p class="thanks-pickup">You can pick up your shirt at {{ merch.shirt.pickup }}.</p>
+  <p><a class="link-quiet" href="{{ "/home.html" | url }}">Back to the shows</a></p>
+</section>
