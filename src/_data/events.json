@@ -820,5 +820,22 @@
     "body_html": "<p>Record pop-up with live EDM. 2PM–7PM, all ages, free entry.</p><p>JJARO, Austin Litz, KOKOP3LLI, BROOCE, ZZINGG. Stream it on youtube.com/@zzinggfx</p>",
     "ticket": null,
     "flyer": "content/flyers/sunday-scaries.jpeg"
+  },
+  {
+    "slug": "shamboogi-good-time-jordie-tobin-james-and-katriella-co",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "1064975813080879",
+    "fbUrl": "https://www.facebook.com/events/1064975813080879/",
+    "title": "Shamboogi, Good Time Jordie, Tobin James, and Katriella & Co",
+    "start": "2026-10-17T19:00:00-0400",
+    "end": null,
+    "location": "Sandbox Brewhouse",
+    "city": "Frederick",
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/shamboogi-good-time-jordie-tobin-james-and-katriella-co.jpg"
   }
 ]
