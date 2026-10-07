@@ -837,5 +837,20 @@
     "body_html": "",
     "ticket": null,
     "flyer": "content/flyers/shamboogi-good-time-jordie-tobin-james-and-katriella-co.jpg"
+  },
+  {
+    "slug": "nightmare-on-east-st-halloween-night",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "2465586993970342",
+    "fbUrl": "https://www.facebook.com/events/2465586993970342/",
+    "title": "Nightmare on East St 🕸️ Halloween Night",
+    "start": "2026-10-31T18:00:00-0400",
+    "end": null,
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/nightmare-on-east-st-halloween-night.jpg"
   }
 ]
