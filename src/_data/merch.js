@@ -18,8 +18,8 @@ import renderImage from '../../lib/image.js';
 //
 // The .png is the cutout with a real alpha channel; the .jpg beside it is the
 // same framing flattened onto white. Switching between them is this one line
-// plus the `formats` below — but see .lp-shirt in site.css, which supplies the
-// glass surface the transparent version needs and the white one does not.
+// plus the `formats` below — but see .thanks-shirt in site.css, which supplies
+// the glass surface the transparent version needs and the white one does not.
 const SHIRT_SRC = 'content/merch/infinity-tribe-nester-seven-teller-shirt.png';
 const SHIRT_ALT =
   'Black Brain Dead Live show t-shirt for Infinity Tribe & Nester at the Carroll Creek Amphitheater, Sept 26.';

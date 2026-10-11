@@ -18,11 +18,10 @@ Read `AGENTS.md` before touching anything.
 
 ## Site shape
 
-- `/` — landing page: full-viewport background video, flyer at 50% of
-  viewport height, Buy Tickets CTA, "continue →" bottom-left,
-  "presented by braindead live" + Instagram bottom-right.
-- `/home.html` — the main site: next show, marquee, mailing list, team,
-  contact.
+- `/` — the main site (formerly `/home.html`): next show, marquee,
+  mailing list, team, contact. The video-background landing page that
+  used to sit in front of this at `/` was removed; `src/home.njk` now
+  renders directly to `/`.
 - `/calendar/<slug>/` — 46 event pages, plus `.ics` per event.
 - `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`.
 
@@ -40,11 +39,12 @@ Read `AGENTS.md` before touching anything.
       it caught: a duplicate `.next-show` selector, and empty `target=""`
       attributes inherited from Squarespace body HTML.
 - [x] Landing background video cut to a 10s loop (1.28 MB, down from
-      3.07 MB). Whole landing page is now ~1.45 MB.
+      3.07 MB). Whole landing page is now ~1.45 MB. (The landing page
+      and this video were later removed — see Site shape above.)
 - [x] Umami event tags on the links worth tracking:
       - `buy-tickets` — every ticket link, including the ones inline in
         event body prose, not just the buttons. Carries `placement`
-        (landing / next-show / event-page / body) and `slug`.
+        (next-show / event-page / body) and `slug`.
       - `event-open` — flyer, next-show title and calendar cards, with
         `placement` and `slug`.
       - `newsletter-subscribe`, `contact-dm` (with `network`).
@@ -52,7 +52,6 @@ Read `AGENTS.md` before touching anything.
       - `lineup-artist` with `handle` — which artists pull clicks.
       - `social-instagram` / `-facebook` / `-soundcloud` / `-youtube`,
         with `placement` for header vs footer.
-      - `landing-continue` — the splash-to-site funnel.
 - [x] 46 event pages from one template + extracted data.
 - [x] Real CSS layout — no Fluid Engine `container-styles` /
       `transform-vars` soup, no vendor bundles.
@@ -104,6 +103,10 @@ Read `AGENTS.md` before touching anything.
       hard enough to pull attention off the flyer. Shadows and midtones
       still follow the line measured off the previous clip. All baked in via
       ffmpeg so there is no runtime filter cost.
+
+      (The landing page this fed was later removed, along with the encoded
+      files and `tools/encode-hero.sh` — see Site shape above. The window,
+      framing and grade are preserved here in case the clip is reused.)
 - [x] `pathPrefix` support so the site works both at a domain root and on
       a GitHub Pages project URL. Set `PATH_PREFIX` at build time.
 - [x] GitHub Pages deploy workflow (`.github/workflows/deploy.yml`).
@@ -219,23 +222,28 @@ Read `AGENTS.md` before touching anything.
 - **Homepage video: nothing to port.** The original used YouTube video
   `kzL268WnzmY` as a *section background* on the hero, which rendered blank
   in the mirror because Squarespace's `video-background.js` never loaded.
-  That hero was removed by design, and the landing page does the same job
-  better with a self-hosted, graded clip and no third-party player.
+  That hero was removed by design. A self-hosted, graded clip briefly
+  replaced it on a standalone landing page, which was itself later removed
+  (see Site shape above) — the current homepage carries no video.
 
-  A YouTube embed was reconsidered for the landing backdrop and rejected:
-  the player ships roughly a megabyte of JavaScript before it decodes a
-  frame, it sizes its quality to the element so a full-bleed background
-  pulls *more* video than the self-hosted file, `loop` re-seeks visibly on
-  a 10s clip, an ad blocker leaves a black rectangle with no poster, and
-  iOS muted autoplay in an iframe is unreliable.
+  A YouTube embed was reconsidered for that backdrop and rejected: the
+  player ships roughly a megabyte of JavaScript before it decodes a frame,
+  it sizes its quality to the element so a full-bleed background pulls
+  *more* video than a self-hosted file, `loop` re-seeks visibly on a 10s
+  clip, an ad blocker leaves a black rectangle with no poster, and iOS
+  muted autoplay in an iframe is unreliable. Worth re-reading if video ever
+  comes back to any page.
 
-- **The multicam master is not in the repo** (391 MB). `tools/encode-hero.sh`
-  defaults to `~/Downloads`; pass a path or set `HERO_SRC`. It alternates
-  between full-frame single-camera shots (0-236s) and composited multi-up
-  grids (2-up from ~240s, 2x2 later), and the edit cuts roughly every 8s.
-  Only the full-frame region is usable. Detect cuts at scene threshold
-  **0.08**, not 0.20 — 0.20 silently merges genuinely different shots
-  (it reported 169.47-191.19 as one 21.7s take when it is three).
+- **The multicam master was never in the repo** (391 MB, lived in
+  `~/Downloads`). `tools/encode-hero.sh`, which cut the landing-page clip
+  from it, was deleted along with the landing page and its encoded
+  outputs. If that footage is reused, the cut-detection finding is worth
+  not re-deriving: the master alternates full-frame single-camera shots
+  (0-236s) and composited multi-up grids (2-up from ~240s, 2x2 later), cut
+  roughly every 8s, and only the full-frame region is usable. Detect cuts
+  at scene threshold **0.08**, not 0.20 — 0.20 silently merges genuinely
+  different shots (it reported 169.47-191.19 as one 21.7s take when it is
+  three).
 
 - **Event titles run long.** One is 144 characters. Browsers show them
   fine; search results truncate around 60. Shortening real show names
