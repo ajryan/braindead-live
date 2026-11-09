@@ -852,5 +852,22 @@
     "body_html": "",
     "ticket": null,
     "flyer": "content/flyers/nightmare-on-east-st-halloween-night.jpg"
+  },
+  {
+    "slug": "gatwick-absent-habits-an-awful-panic-rock-at-sandbox",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "1814927306417930",
+    "fbUrl": "https://www.facebook.com/events/1814927306417930/",
+    "title": "Gatwick, Absent Habits, & An Awful Panic - Rock at Sandbox 🎸",
+    "start": "2026-11-21T19:00:00-0500",
+    "end": null,
+    "location": "Sandbox Brewhouse",
+    "city": "Frederick",
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/gatwick-absent-habits-an-awful-panic-rock-at-sandbox.jpg"
   }
 ]
