@@ -869,5 +869,22 @@
     "body_html": "",
     "ticket": null,
     "flyer": "content/flyers/gatwick-absent-habits-an-awful-panic-rock-at-sandbox.jpg"
+  },
+  {
+    "slug": "channel-zero-goth-dj-nite-5128",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "2036617327025128",
+    "fbUrl": "https://www.facebook.com/events/2036617327025128/",
+    "title": "Channel Zero 🖤 Goth DJ Nite",
+    "start": "2026-12-05T20:00:00-0500",
+    "end": null,
+    "location": "Sandbox Brewhouse",
+    "city": "Frederick",
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/channel-zero-goth-dj-nite-5128.jpg"
   }
 ]
