@@ -886,5 +886,22 @@
     "body_html": "",
     "ticket": null,
     "flyer": "content/flyers/channel-zero-goth-dj-nite-5128.jpg"
+  },
+  {
+    "slug": "pour-over-blazoner-full-bush-live-at-sandbox",
+    "source": {
+      "adapter": "facebook-events"
+    },
+    "fbId": "965080296446176",
+    "fbUrl": "https://www.facebook.com/events/965080296446176/",
+    "title": "Pour Over, Blazoner, Full Bush LIVE at Sandbox",
+    "start": "2026-12-12T19:00:00-0500",
+    "end": null,
+    "location": "Sandbox Brewhouse",
+    "city": "Frederick",
+    "canceled": false,
+    "body_html": "",
+    "ticket": null,
+    "flyer": "content/flyers/pour-over-blazoner-full-bush-live-at-sandbox.jpg"
   }
 ]
